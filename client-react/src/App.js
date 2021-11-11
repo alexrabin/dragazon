@@ -1,11 +1,12 @@
 import React from "react";
-import  Task from "./components/Task";
 import "./App.css";
+import NavigationBar from "./components/NavigationBar";
 
 function App() {
   return (
     <div className="App">
-      <Task />
+      <NavigationBar/>
+      
     </div>
   );
 }
