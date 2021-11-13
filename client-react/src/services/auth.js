@@ -20,7 +20,7 @@ const authService = {
             return {response: response}
         }
         catch (err){
-            return {error:err.response.data};
+            return {error:err.response ? err.response.data: "network error"};
         }
         
     },
@@ -38,7 +38,7 @@ const authService = {
             } )
             return {response: response};
         } catch (err) {
-            return {error:err.response.data};
+            return {error:err.response ? err.response.data: "network error"};
         }
     },
     logout: async function(){
@@ -52,7 +52,7 @@ const authService = {
             } )
             return {response: response};
         } catch (err) {
-            return {error:err.response.data};
+            return {error:err.response ? err.response.data: "network error"};
         }
     },
     getLoggedInUser: async function(){
@@ -66,7 +66,8 @@ const authService = {
             } )
             return {response: response};
         } catch (err) {
-            return {error:err.response.data};
+            
+            return {error:err.response ? err.response.data: "network error"};
         }
     }
 

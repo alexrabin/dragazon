@@ -108,6 +108,8 @@ export default function LoginPage() {
                     <Form.Control ref={passwordInput} required type="password" placeholder="Password" isInvalid={errorMsg === "Wrong password"}/>
                     <Form.Control.Feedback type="invalid">Incorrect Password</Form.Control.Feedback>
                 </Form.Group>
+
+                {errorMsg === "network error" && <p className="text-danger text-center">Could not connect to server</p>}
                 <div className="text-center">
                 <Button variant="primary" type="submit" style={{paddingRight:50, paddingLeft:50}}>
                     {showLogin ? "Login":"Sign Up"}
