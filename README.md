@@ -20,7 +20,7 @@ Start server first:
 
 `cd server-express-mongodb`
 
-`nodmon`
+`nodemon`
 
 Make sure the server is running on http://localhost:3000
 
