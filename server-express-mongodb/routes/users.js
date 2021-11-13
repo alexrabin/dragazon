@@ -45,6 +45,8 @@ router.post("/signup", async function(req, res, next) {
 
     try {
         let user = await newUser.save();
+        const token = authService.signUser(user);
+        res.cookie('jwt', token);
         return res.json({user, message: "User created"});
     } catch (error) {
         let key = Object.keys(error.keyValue)[0];
