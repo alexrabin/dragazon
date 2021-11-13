@@ -40,6 +40,7 @@ export default function NavigationBar() {
       <Offcanvas.Body>
         <Nav className="justify-content-end flex-grow-1 pe-3">
           <Nav.Link href="/">Home</Nav.Link>
+          {profile !== null && <Nav.Link href="/profile">Profile</Nav.Link>}
           {profile === null ? <Nav.Link href="/login">Login</Nav.Link>: <Nav.Link onClick={async ()=> {
             setShow(false);
             await authService.logout(); 
