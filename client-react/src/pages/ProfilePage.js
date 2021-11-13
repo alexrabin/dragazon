@@ -11,6 +11,7 @@ export default function ProfilePage() {
             let user = await authService.getLoggedInUser();
             if (user.error){
                 navigate('/login');
+                return
             }
             setProfile(user.response.data);
         }
