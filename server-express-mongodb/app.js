@@ -3,8 +3,13 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var cors = require("cors");
+
+const dotenv = require('dotenv');
+dotenv.config();
+
 var mongoose = require("mongoose");
 
+var usersRouter = require("./routes/users");
 var tasksRouter = require("./routes/tasks");
 
 var app = express();
@@ -17,10 +22,11 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 
 app.use("/tasks", tasksRouter);
+app.use("/users", usersRouter);
 
 //var mongoDB = "mongodb://127.0.0.1/database";
 var mongoDB =
-  "mongodb+srv://ammon:Password1%21@cluster0-lhvh5.mongodb.net/test?retryWrites=true&w=majority";
+`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@dragdb.v2dr9.mongodb.net/Dragazon?retryWrites=true&w=majority`;
 mongoose.connect(mongoDB, { useNewUrlParser: true });
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
