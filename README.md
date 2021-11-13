@@ -1,6 +1,12 @@
 # Debuggin-Dragons E-Commerce Dragazon Website
 
-## When downloading the project
+MERN e-commerce application created by Lonnie Mitchell, Chris Garrison, and Alexander Rabin
+
+# Contents
+ - [When downloading the project](#when-downloading-the-project) 
+ - [How to run in development](#how-to-run-in-development) 
+
+# When downloading the project
 
 Download node dependencies for react app
 
@@ -14,7 +20,7 @@ Go back to root then download node dependencies for express app
 
 `npm i`
 
-## How to run in development
+# How to run in development
 
 Start server first:
 
