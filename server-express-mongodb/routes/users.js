@@ -2,10 +2,7 @@ var express = require("express");
 var router = express.Router();
 var UserModel = require("../models/users");
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 var authService = require('../services/auth');
-const { verifyUser } = require("../services/auth");
-
 router.get("/", async function(req, res, next) {
 
     let token = req.cookies.jwt;
