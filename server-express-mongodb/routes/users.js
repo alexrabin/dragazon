@@ -46,7 +46,10 @@ router.post("/signup", async function(req, res, next) {
     try {
         let user = await newUser.save();
         const token = authService.signUser(user);
-        res.cookie('jwt', token);
+        res.cookie('jwt', token, {
+          httpOnly: true,
+          sameSite:true
+        });
         return res.json({user, message: "User created"});
     } catch (error) {
         let key = Object.keys(error.keyValue)[0];
@@ -72,7 +75,10 @@ router.post("/login", async function(req, res, next) {
     let passwordMatch = await bcrypt.compare(password, user.password);
     if (passwordMatch){
         const token = authService.signUser(user);
-        res.cookie('jwt', token);
+        res.cookie('jwt', token, {
+          httpOnly: true,
+          sameSite:true
+        });
         return res.send('Login successful');
     }
     else {

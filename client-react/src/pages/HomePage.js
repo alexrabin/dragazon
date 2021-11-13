@@ -9,8 +9,8 @@ export default function HomePage() {
             <h1 className="mb-4">Welcome to Dragazon</h1>
             <Row className="justify-content-center mx-auto gy-4 gx-4">
                 {loading && blank_array.map((i, key)=> (
-                    // <Col className="" key={key}>
-                        <Card className="col-auto p-4 m-3" style={{ width: '18rem' }}>
+                    
+                        <Card className="col-auto p-4 m-3" key={key} style={{ width: '18rem' }}>
                             {/* <Card.Img variant="top" src={`https://source.unsplash.com/1600x900/?dragon`} /> */}
                             <Placeholder.Button variant="primary" size="lg" />
 
@@ -25,7 +25,7 @@ export default function HomePage() {
                             {/* <Placeholder.Button variant="primary" xs={6} /> */}
                             </Card.Body>
                         </Card>
-                    // </Col>
+                    
                 ))}
 
                 {!loading && <h1>Showing Inventory</h1>}
