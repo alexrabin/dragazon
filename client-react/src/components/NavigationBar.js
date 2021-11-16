@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import {Navbar, Container, Nav, NavDropdown, Offcanvas} from 'react-bootstrap'
 import authService from '../services/auth';
 import { useNavigate } from 'react-router-dom';
+import logo from '../assets/dragazonlogo.png'
 export default function NavigationBar() {
   const [profile, setProfile] = useState(null)
   const [show, setShow] = useState(false);
@@ -28,7 +29,12 @@ export default function NavigationBar() {
             
             <Navbar bg="light" expand={false}>
               <Container fluid>
-                <Navbar.Brand href="/">Dragazon</Navbar.Brand>
+                {/* <Navbar.Brand href="/">Dragazon</Navbar.Brand> */}
+                <Navbar.Brand>
+                  <a href="#">
+                    <img src={logo} style = {{width: 250, marginTop:-7}}></img>
+                  </a>  
+                </Navbar.Brand> 
                 <Navbar.Toggle aria-controls="offcanvasNavbar" onClick={()=> setShow(true)}/>
                 <Navbar.Offcanvas
                   show={show}
