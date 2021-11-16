@@ -28,6 +28,18 @@ const adminService = {
         } catch (err) {
             return {error:err.response ? err.response.data: "network error"};
         }
+    },
+    deleteUser: async function(userId){
+
+    },
+    createProduct: async function(title, desc, img, categories, price, inStock){
+
+    },
+    updateProduct: async function(title, desc, img, categories, price, inStock){
+
+    },
+    deleteProduct: async function(productId){
+
     }
 }
 export default adminService
