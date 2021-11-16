@@ -284,6 +284,33 @@ router.get('/userID/:id', async function(req, res, next){
     
   });
 
+router.post('/makeadmin/:id', async function(req,res,next){
+  let token = req.cookies.jwt;
+  if (!token){
+    res.status(401);
+    res.send('Must be logged in');
+    return
+  }
+
+  let user = await authService.verifyUser(token);
+  if (user && user.isAdmin){
+      UserModel.findByIdAndUpdate(
+            req.params.id,
+            {
+              isAdmin: true,
+            },
+            { new: true },
+            (err, user) => {
+              if (err) return res.status(400).send(err);
+              res.send(user);
+            }
+          );
+  }
+  else {
+      res.status(401);
+      res.send('Must be an admin.');
+    }
+});
 router.delete("/:id", async function(req, res, next) {
 
   let token = req.cookies.jwt;
