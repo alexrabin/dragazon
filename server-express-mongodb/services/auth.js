@@ -10,7 +10,7 @@ var authService = {
             id: user._id,
             isAdmin: user.isAdmin
         }, '991abd0371a608a298b01cba186f7c5c', {
-            expiresIn: '1h'
+            expiresIn: '1d'
         });
         return token;
     },

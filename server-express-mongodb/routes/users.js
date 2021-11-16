@@ -1,6 +1,8 @@
 var express = require("express");
 var router = express.Router();
 var UserModel = require("../models/users");
+var CartModel = require('../models/cart');
+
 const bcrypt = require('bcrypt');
 var authService = require('../services/auth');
 router.get("/", async function(req, res, next) {
@@ -55,7 +57,6 @@ router.post("/signup", async function(req, res, next) {
         let key = Object.keys(error.keyValue)[0];
         let value = error.keyValue[key];
         return res.status(400).send(`The ${key} ${value} is taken.`);
-        // console.log("Creating user error:",JSON.stringify(error));
     }
     
 });
@@ -110,6 +111,49 @@ router.get('/logout', function(req, res, next){
     res.send('logged out');
   });
 
+router.post('/addtocart', async function(req, res, next){
+  let token = req.cookies.jwt;
+  if (!token){
+      return res.status(401).send('Must be logged in.')
+  }
+  let products = req.body.products;
+
+  if (products === undefined){
+    return res.status(401).send('Products are required.');
+  }
+  
+  let user = await authService.verifyUser(token);
+    if (user){
+      let cart = await CartModel.findOneAndUpdate({userId: user.id}, {$push: {products: products}}, {upsert: true, new: true});
+      return res.send(cart)
+    }
+    else {
+      res.status(401);
+      res.send('Must be logged in');
+    }
+});
+
+router.post('/removefromcart', async function(req, res, next){
+  let token = req.cookies.jwt;
+  if (!token){
+      return res.status(401).send('Must be logged in.')
+  }
+  let products = req.body.products;
+
+  if (products === undefined){
+    return res.status(401).send('Products are required.');
+  }
+  
+  let user = await authService.verifyUser(token);
+    if (user){
+      let cart = await CartModel.findOneAndUpdate({userId: user.id}, {$pullAll: {products: products  }}, {upsert: true, new: true});
+      return res.send(cart)
+    }
+    else {
+      res.status(401);
+      res.send('Must be logged in');
+    }
+});
 
 router.get('/userID/:id', async function(req, res, next){
 
@@ -143,26 +187,42 @@ router.get('/userID/:id', async function(req, res, next){
     
   });
 
-router.delete("/:id", function(req, res, next) {
-  TaskModel.findByIdAndRemove(req.params.id, (err, task) => {
-    if (err) return res.status(400).send(err);
-    res.send(task);
-  });
+router.delete("/:id", async function(req, res, next) {
+
+  let token = req.cookies.jwt;
+    if (!token){
+      res.status(401);
+      res.send('Must be logged in');
+      return
+    }
+
+    let user = await authService.verifyUser(token);
+    if (user && user.isAdmin){
+      UserModel.findByIdAndRemove(req.params.id, (err, task) => {
+        if (err) return res.status(400).send(err);
+        res.send({task, message:`Deleted Task: ${req.params.id} ID`});
+      });
+    }
+    else {
+        res.status(401);
+        res.send('Must be an admin.');
+      }
+  
 });
 
-router.put("/:id", function(req, res, next) {
-  TaskModel.findByIdAndUpdate(
-    req.params.id,
-    {
-      name: req.body.name,
-      complete: req.body.complete
-    },
-    { new: true },
-    (err, task) => {
-      if (err) return res.status(400).send(err);
-      res.send(task);
-    }
-  );
-});
+// router.put("/:id", function(req, res, next) {
+//   TaskModel.findByIdAndUpdate(
+//     req.params.id,
+//     {
+//       name: req.body.name,
+//       complete: req.body.complete
+//     },
+//     { new: true },
+//     (err, task) => {
+//       if (err) return res.status(400).send(err);
+//       res.send(task);
+//     }
+//   );
+// });
 
 module.exports = router;
