@@ -192,6 +192,7 @@ router.post('/createorder', async function(req,res,next){
 
           try {
             let order = await newOrder.save();
+            await CartModel.findOneAndUpdate({userId: user.id}, {products: []}, {upsert: true, new: true});
             return res.json({order, message: "New order created"});
         } catch (error) {
             return res.status(400).send(JSON.stringify(error));
