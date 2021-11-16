@@ -2,6 +2,8 @@ var express = require("express");
 var router = express.Router();
 var UserModel = require("../models/users");
 var CartModel = require('../models/cart');
+var OrderModel = require('../models/order');
+var ProductsModel = require('../models/products');
 
 const bcrypt = require('bcrypt');
 var authService = require('../services/auth');
@@ -154,7 +156,101 @@ router.post('/removefromcart', async function(req, res, next){
       res.send('Must be logged in');
     }
 });
+router.post('/createorder', async function(req,res,next){
+    let token = req.cookies.jwt;
+    if (!token){
+        return res.status(401).send('Must be logged in.')
+    }
 
+    let address = req.body.address;
+
+    if (address === undefined){
+      return res.status(401).send('Address is required.');
+    }
+
+    let user = await authService.verifyUser(token);
+    if (user){
+      let cart = await CartModel.findOne({userId: user.id}).exec();
+      if (cart){
+          if (cart.products.length === 0){
+            return res.status(401).send("No items in cart");
+          }
+
+          const productIds = cart.products.map(product => product.productId);
+          let products = await ProductsModel.find().where('_id').in(productIds).exec();
+          
+          let amount = cart.products.map(product => {
+            return product.quantity * products.find(elem => elem._id == product.productId).price
+          }).reduce((a, b) => a+b);
+
+
+          let newOrder = new OrderModel();
+          newOrder.userId = user.id;
+          newOrder.products = cart.products;
+          newOrder.address = address;
+          newOrder.amount = amount;
+
+          try {
+            let order = await newOrder.save();
+            return res.json({order, message: "New order created"});
+        } catch (error) {
+            return res.status(400).send(JSON.stringify(error));
+        }
+
+          
+      }
+      else{
+        return res.status(401).send("No items in cart");
+      }
+    }
+    else {
+      res.status(401);
+      res.send('Must be logged in');
+    }
+});
+
+router.get('/orders', async function(req, res, next){
+  let token = req.cookies.jwt;
+  if (!token){
+      return res.status(401).send('Must be logged in.')
+  }
+  let user = await authService.verifyUser(token);
+  if (user){
+    OrderModel.find({userId: user.id}).then(orders => res.json(orders));
+  }
+  else {
+    res.status(401);
+    res.send('Must be logged in');
+  }
+})
+router.get('/order/:id', async function(req, res, next){
+  let token = req.cookies.jwt;
+  if (!token){
+      return res.status(401).send('Must be logged in.')
+  }
+  let user = await authService.verifyUser(token);
+    if (user){
+      try {
+        var order = (await OrderModel.findById(req.params.id).exec()).toObject();
+        const productIds = order.products.map(product => product.productId);
+        let products = await ProductsModel.find().where('_id').in(productIds).exec();
+        var productItems = order.products.map(p => {
+          let product = products.find(elem => elem._id == p.productId);
+          console.log(JSON.stringify(product));
+          return {...p, product};
+        });
+        order.products = productItems;
+        return res.json(order)
+    }
+    catch (err){
+        return res.status(401).send("Couldn't find order: "+err);
+    }
+  }
+  else {
+    res.status(401);
+    res.send('Must be logged in');
+  }
+})
 router.get('/userID/:id', async function(req, res, next){
 
     let token = req.cookies.jwt;
