@@ -30,7 +30,21 @@ const adminService = {
         }
     },
     deleteUser: async function(userId){
-
+        try {
+            const response = await axios.delete(`${process.env.REACT_APP_SERVER_URL}/users/${userId}`, {
+                 headers: {
+                 'content-type': 'application/json'
+                },
+                withCredentials: true,
+                credentials: 'same-origin',
+            } )
+            return {response: response};
+        } catch (err) {
+            return {error:err.response ? err.response.data: "network error"};
+        }
+    },
+    getAllProducts: async function () {
+    
     },
     createProduct: async function(title, desc, img, categories, price, inStock){
 
@@ -39,6 +53,15 @@ const adminService = {
 
     },
     deleteProduct: async function(productId){
+
+    },
+    getAllOrders: async function() {
+
+    },
+    updateOrder: async function(orderId, details){
+
+    },
+    deleteOrder: async function(orderId){
 
     }
 }

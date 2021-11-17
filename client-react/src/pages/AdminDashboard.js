@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Container, Form, Accordion, Button} from 'react-bootstrap'
+import { Container, Form, Accordion, Button, ButtonGroup} from 'react-bootstrap'
 import authService from '../services/auth';
 import adminService from '../services/admin';
 
@@ -48,6 +48,18 @@ export default function AdminDashboardPage() {
 
         }
     }
+
+    const deleteUser = async (userID) => {
+        let deleteUser = await adminService.deleteUser(userID);
+        if (deleteUser.error){
+            console.log(deleteUser.error)
+            // setAllUsers("Could not load users");
+        }
+        else{
+            fetchAllUsers();
+
+        }
+    }
     return (
         <Container className="mt-5 mb-5">
             <h1 className="mb-4">Admin Dashboard</h1>
@@ -85,7 +97,13 @@ export default function AdminDashboardPage() {
                                         <Form.Label>Admin</Form.Label>
                                         <Form.Control value={user.isAdmin} disabled />
                                     </Form.Group>
-                                    {!user.isAdmin && <Button variant="primary" onClick={() => makeUserAdmin(user._id)}>Make Admin</Button>}
+
+                                    <ButtonGroup aria-label="Admin Actions">
+                                        {!user.isAdmin && <Button variant="primary" onClick={() => makeUserAdmin(user._id)}>Make Admin</Button>}
+                                        <Button variant="danger" onClick={() => deleteUser(user._id)}>Delete</Button>
+                                        </ButtonGroup>
+
+                                    
                                     </Accordion.Body>
                                     </Accordion.Item>
 

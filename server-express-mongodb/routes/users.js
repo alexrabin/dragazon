@@ -324,7 +324,7 @@ router.delete("/:id", async function(req, res, next) {
     if (user && user.isAdmin){
       UserModel.findByIdAndRemove(req.params.id, (err, task) => {
         if (err) return res.status(400).send(err);
-        res.send({task, message:`Deleted Task: ${req.params.id} ID`});
+        res.send({task, message:`Deleted User: ${req.params.id} ID`});
       });
     }
     else {
