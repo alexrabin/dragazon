@@ -14,11 +14,25 @@ Download node dependencies for react app
 
 `npm i`
 
+Create two files: `.env.development` and `.env.production` and put them in the root of the `client-react` folder.
+
+In both of those files add the key `REACT_APP_SERVER_URL` and set it to url you are using for development and what url you are using for production in the respective files.
+
 Go back to root then download node dependencies for express app
 
 `cd server-express-mongodb`
 
 `npm i`
+
+Create `.env`  and put the file in the root of the `server-express-mongodb` folder.
+
+Within this file, add the keys:
+```
+DB_USERNAME="[your username here]"
+DB_PASSWORD="[your password here]"
+```
+
+Now you are set to run the project.
 
 # How to run in development
 
