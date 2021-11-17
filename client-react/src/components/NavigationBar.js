@@ -37,8 +37,8 @@ export default function NavigationBar() {
         <Container fluid>
          
           <Navbar.Brand>
-            <a href="#">
-              <img src={logo} style={{ width: 250, marginTop: -7 }}></img>
+            <a href="/">
+              <img src={logo} style={{ width: 140, marginTop: 0 }}></img>
             </a>
           </Navbar.Brand>
           <Navbar.Toggle
@@ -55,8 +55,8 @@ export default function NavigationBar() {
             <Offcanvas.Header closeButton>
              
               <Offcanvas.Title id="offcanvasNavbarLabel">
-                <a href="#">
-                  <img src={logo} style={{ width: 200, marginTop: -7 }}></img>
+                <a href="/">
+                  <img src={logo} style={{ width: 140, marginTop: 0 }}></img>
                 </a>
               </Offcanvas.Title>
             </Offcanvas.Header>
