@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import {Col, Container, Row, Placeholder, Card} from 'react-bootstrap'
 
+
 export default function HomePage() {
     const blank_array = "12345678".split('');
     const [loading, setLoading] = useState(true);

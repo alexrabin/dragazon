@@ -9,6 +9,10 @@ import {
 import authService from "../services/auth";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/dragazonlogo.png";
+import './NavigationBar.css';
+
+
+
 export default function NavigationBar() {
   const [profile, setProfile] = useState(null);
   const [show, setShow] = useState(false);
@@ -29,9 +33,9 @@ export default function NavigationBar() {
 
   return (
     <div>
-      <Navbar bg="light" expand={false}>
+      <Navbar bg = 'ivory' expand={false}>
         <Container fluid>
-          {/* <Navbar.Brand href="/">Dragazon</Navbar.Brand> */}
+         
           <Navbar.Brand>
             <a href="#">
               <img src={logo} style={{ width: 250, marginTop: -7 }}></img>
