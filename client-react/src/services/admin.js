@@ -44,7 +44,18 @@ const adminService = {
         }
     },
     getAllProducts: async function () {
-    
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/products`, {
+                 headers: {
+                 'content-type': 'application/json'
+                },
+                withCredentials: true,
+                credentials: 'same-origin',
+            } )
+            return {response: response};
+        } catch (err) {
+            return {error:err.response ? err.response.data: "network error"};
+        }
     },
     createProduct: async function(title, desc, img, categories, price, inStock){
 

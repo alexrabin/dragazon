@@ -1,12 +1,21 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Container, Form, Accordion, Button, ButtonGroup} from 'react-bootstrap'
+import { Container, Form, Accordion, Button, ButtonGroup, Modal} from 'react-bootstrap'
 import authService from '../services/auth';
 import adminService from '../services/admin';
 
 import { useNavigate } from 'react-router-dom';
+import UpdateProductModal from '../components/UpdateProductModal';
 export default function AdminDashboardPage() {
     const [profile, setProfile] = useState(null)
     const [allUsers, setAllUsers] = useState([]);
+    const [allProducts, setAllProducts] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [updateProduct, setUpdateProduct] = useState(null);
+
+
+    const handleClose = () => setShowModal(false);
+    const handleShow = () => setShowModal(true);
+
     const navigate = useNavigate();
 
     const fetchAllUsers = async () => {
@@ -18,6 +27,17 @@ export default function AdminDashboardPage() {
                 setAllUsers(allUsers.response.data);
             }
     }
+
+    const fetchAllProducts = async () => {
+        let allProducts = await adminService.getAllProducts();
+            if (allProducts.error){
+                setAllProducts("Could not load products");
+            }
+            else{
+                setAllProducts(allProducts.response.data);
+            }
+    }
+
     const fetchProfile = useCallback(async () => {
         let user = await authService.getLoggedInUser();
             if (user.error){
@@ -29,6 +49,7 @@ export default function AdminDashboardPage() {
                 return
             }
             fetchAllUsers();
+            fetchAllProducts();
             setProfile(user.response.data);
 
       }, [navigate])
@@ -59,6 +80,11 @@ export default function AdminDashboardPage() {
             fetchAllUsers();
 
         }
+    }
+    const getReadablePrice = (price) => {
+        var dollars = price / 100;
+        dollars = dollars.toLocaleString("en-US", {style:"currency", currency:"USD"});
+        return dollars;
     }
     return (
         <Container className="mt-5 mb-5">
@@ -115,6 +141,67 @@ export default function AdminDashboardPage() {
                         </Accordion.Body>
                     </Accordion.Item>
                     <Accordion.Item eventKey="1">
+                        <Accordion.Header>Products</Accordion.Header>
+                        <Accordion.Body>
+                        {allProducts === "Could not load products" ? <p>{allProducts}</p> : 
+                        allProducts.map((product, key) => {
+                            return <div key={key}>
+
+                                <Accordion>
+                                    <Accordion.Item eventKey="0">
+                                    <Accordion.Header>{product.title}</Accordion.Header>
+                                    <Accordion.Body>
+                                    <img src={product.img} style={{width:200, }} className="mb-3 text-center mx-auto"/>
+                                    <Form.Group className="mb-3">
+                                    <Form.Label>Image</Form.Label>
+                                    <Form.Control value={product.img} disabled />
+                                    </Form.Group>
+                                    <Form.Group className="mb-3">
+                                    <Form.Label>Title</Form.Label>
+                                    <Form.Control value={product.title} disabled />
+                                    </Form.Group>
+                                    <Form.Group className="mb-3">
+                                    <Form.Label>Description</Form.Label>
+                                    <Form.Control value={product.desc} disabled />
+                                    </Form.Group>
+                                    <Form.Group className="mb-3">
+                                    <Form.Label>Categories</Form.Label>
+                                    <Form.Control value={product.categories} disabled />
+                                    </Form.Group>
+                                    <Form.Group className="mb-3">
+                                    <Form.Label>Price</Form.Label>
+                                    <Form.Control value={getReadablePrice(product.price)} disabled />
+                                    </Form.Group>
+                                    <Form.Group className="mb-3">
+                                    <Form.Label>In Stock</Form.Label>
+                                    <Form.Control value={product.inStock} disabled />
+                                    </Form.Group>
+                                    <Form.Group className="mb-3">
+                                        <Form.Label>ID</Form.Label>
+                                        <Form.Control value={product._id} disabled />
+                                    </Form.Group>
+
+                                    <ButtonGroup aria-label="Admin Actions">
+                                        <Button variant="primary" onClick={() =>{
+                                            setUpdateProduct(product);
+                                            handleShow();
+
+                                        }}>Update</Button>
+                                        <Button variant="danger" onClick={() => {}}>Delete</Button>
+                                        </ButtonGroup>
+
+                                    
+                                    </Accordion.Body>
+                                    </Accordion.Item>
+
+                                </Accordion>
+                                
+                                </div>
+                        })
+                        }
+                        </Accordion.Body>
+                    </Accordion.Item>
+                    <Accordion.Item eventKey="1">
                         <Accordion.Header>Orders</Accordion.Header>
                         <Accordion.Body>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
@@ -130,7 +217,12 @@ export default function AdminDashboardPage() {
             </>
             
             }
-            
+            {updateProduct && <UpdateProductModal show={showModal} product={updateProduct} onHide={()=>{
+                handleClose();
+                setUpdateProduct(null);
+            }} onUpdatedProduct={(prod) => {
+                console.log("Updated prod: ", prod);
+            }}/>}
             
         </Container>
     )
