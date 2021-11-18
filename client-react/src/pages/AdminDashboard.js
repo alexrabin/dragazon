@@ -7,6 +7,10 @@ import { useNavigate } from 'react-router-dom';
 import UpdateProductModal from '../components/UpdateProductModal';
 import CreateProductModal from '../components/CreateProductModal';
 import OrderDetailsModal from '../components/OrderDetailsModal';
+
+import { FaSyncAlt } from 'react-icons/fa';
+
+
 export default function AdminDashboardPage() {
     const [profile, setProfile] = useState(null)
     const [allUsers, setAllUsers] = useState([]);
@@ -162,6 +166,7 @@ export default function AdminDashboardPage() {
                     <Accordion.Item eventKey="0">
                         <Accordion.Header>Users</Accordion.Header>
                         <Accordion.Body>
+                         <Button className="mt-1 mb-3" onClick={fetchAllUsers}><FaSyncAlt/></Button>   
                         {allUsers === "Could not load users" ? <p>{allUsers}</p> : 
                         allUsers.map((user, key) => {
                             return <div key={key}>
@@ -211,13 +216,16 @@ export default function AdminDashboardPage() {
                     <Accordion.Item eventKey="1">
                         <Accordion.Header>Products</Accordion.Header>
                         <Accordion.Body>
-                        <div className='text-center mb-3'>
-                            <Button variant="success" onClick={() =>{
+                        <div className='mb-3 row justify-content-between'>
+                            <Button className="col-auto" onClick={fetchAllProducts}><FaSyncAlt/></Button>   
+
+                            <Button className="col-auto" variant="success" onClick={() =>{
                                             setCreateNewProduct(true);
                                             handleShow();
 
                                         }}>Create New Product</Button>
                         </div>
+
                         {allProducts === "Could not load products" ? <p>{allProducts}</p> : 
                         <Accordion>
                         {allProducts.map((product, key) => {
@@ -287,6 +295,8 @@ export default function AdminDashboardPage() {
                     <Accordion.Item eventKey="2">
                         <Accordion.Header>Orders</Accordion.Header>
                         <Accordion.Body>
+                        <Button className="mt-1 mb-3" onClick={fetchAllOrders}><FaSyncAlt/></Button>   
+
                         {allOrders === "Could not load orders" ? <p>{allOrders}</p> : 
                         
                         allOrders.map((order, key) => {
