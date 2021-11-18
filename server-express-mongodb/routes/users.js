@@ -135,6 +135,23 @@ router.post('/addtocart', async function(req, res, next){
     }
 });
 
+router.post('/cart', async function(req, res, next){
+  let token = req.cookies.jwt;
+  if (!token){
+      return res.status(401).send('Must be logged in.')
+  }
+  
+  let user = await authService.verifyUser(token);
+    if (user){
+      let cart = await CartModel.find({userId: user.id});
+      return res.send(cart)
+    }
+    else {
+      res.status(401);
+      res.send('Must be logged in');
+    }
+});
+
 router.post('/removefromcart', async function(req, res, next){
   let token = req.cookies.jwt;
   if (!token){
