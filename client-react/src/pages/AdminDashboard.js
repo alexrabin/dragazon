@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Container, Form, Accordion, Button, ButtonGroup, Modal} from 'react-bootstrap'
+import { Container, Form, Accordion, Button, ButtonGroup, Badge, Row} from 'react-bootstrap'
 import authService from '../services/auth';
 import adminService from '../services/admin';
 
@@ -188,11 +188,12 @@ export default function AdminDashboardPage() {
                                         }}>Create New Product</Button>
                         </div>
                         {allProducts === "Could not load products" ? <p>{allProducts}</p> : 
-                        allProducts.map((product, key) => {
+                        <Accordion>
+                        {allProducts.map((product, key) => {
                             return <div key={key}>
 
-                                <Accordion>
-                                    <Accordion.Item eventKey="0">
+                                
+                                    <Accordion.Item eventKey={key}>
                                     <Accordion.Header>{product.title}</Accordion.Header>
                                     <Accordion.Body>
                                     <img src={product.img} style={{width:200, }} className="mb-3 text-center mx-auto"/>
@@ -208,9 +209,12 @@ export default function AdminDashboardPage() {
                                     <Form.Label>Description</Form.Label>
                                     <Form.Control value={product.desc} disabled />
                                     </Form.Group>
-                                    <Form.Group className="mb-3">
-                                    <Form.Label>Categories</Form.Label>
-                                    <Form.Control value={product.categories} disabled />
+                                    <Form.Group className="mb-1">
+                                    <Form.Label>Categories:</Form.Label>
+                                    <Row className="justify-content-start" style={{marginLeft:1, marginRight:1}}>
+                                    {product.categories && product.categories.map((category, cKey) => <Badge key={cKey}className="col-auto m-1" bg="dark" >{category}</Badge>)}
+
+                                    </Row>                                    
                                     </Form.Group>
                                     <Form.Group className="mb-3">
                                     <Form.Label>Price</Form.Label>
@@ -240,10 +244,12 @@ export default function AdminDashboardPage() {
                                     </Accordion.Body>
                                     </Accordion.Item>
 
-                                </Accordion>
+                                
                                 
                                 </div>
-                        })
+                        })}
+                        
+                        </Accordion>
                         }
                         </Accordion.Body>
                     </Accordion.Item>

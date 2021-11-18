@@ -13,7 +13,7 @@ export default function HomePage() {
                     
                         <Card className="col-auto p-4 m-3" key={key} style={{ width: '18rem' }}>
                             {/* <Card.Img variant="top" src={`https://source.unsplash.com/1600x900/?dragon`} /> */}
-                            <Placeholder.Button variant="primary" size="lg" />
+                            <Placeholder.Button variant="danger" size="lg" />
 
                             <Card.Body>
                             <Placeholder as={Card.Title} animation="glow">
