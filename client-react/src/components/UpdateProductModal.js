@@ -2,15 +2,14 @@ import React, { useState, useRef, useEffect } from 'react'
 import { Form,  Button, Modal} from 'react-bootstrap'
 import authService from '../services/auth';
 export default function UpdateProductModal(props) {
-    const[updatedProduct , setUpdatedProduct] = useState(null);
 
     const imageRef = useRef();
     const titleRef = useRef();
     const descRef = useRef();
     const categoriesRef = useRef();
     const priceRef = useRef();
-    const inStockRef = useRef()
-
+    const [inStock, setInStock] = useState(props.product.inStock)
+    
     useEffect(() => {
     
             imageRef.current.value = props.product.img;
@@ -18,16 +17,15 @@ export default function UpdateProductModal(props) {
             descRef.current.value = props.product.desc;
             categoriesRef.current.value = props.product.categories.join(',');
             priceRef.current.value = props.product.price;
-            inStockRef.current.value = props.product.inStock === true ? "on" : "off";
-
     }, [])
 
     return (
-        <Modal {...props} centered scrollable>
+        <Modal show={props.show} onHide={props.onHide} centered scrollable>
                 <Modal.Header>
                 <Modal.Title>Update Product</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                    
                     <Form>
                             <Form.Group className="mb-3">
                             <Form.Label>Image</Form.Label>
@@ -46,11 +44,13 @@ export default function UpdateProductModal(props) {
                             <Form.Control ref={categoriesRef} />
                             </Form.Group>
                             <Form.Group className="mb-3">
-                            <Form.Label>Price</Form.Label>
+                            <Form.Label>Price in cents</Form.Label>
                             <Form.Control ref={priceRef} />
                             </Form.Group>
                             <Form.Group className="mb-3">
-                            <Form.Check type="checkbox" label="In Stock" ref={inStockRef} />
+                            <Form.Check type="checkbox" label="In Stock" checked ={inStock} onChange={(e) => {
+                                setInStock(e.target.checked)
+                            }} />
 
                             </Form.Group>
 
@@ -68,7 +68,7 @@ export default function UpdateProductModal(props) {
                         img: imageRef.current.value,
                         desc: descRef.current.value,
                         title: titleRef.current.value,
-                        inStock: inStockRef.current.value,
+                        inStock: inStock,
                         price: priceRef.current.value
                     }
                     props.onUpdatedProduct(updatedProduct);

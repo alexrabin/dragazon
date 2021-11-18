@@ -10,8 +10,8 @@ export default function AdminDashboardPage() {
     const [allUsers, setAllUsers] = useState([]);
     const [allProducts, setAllProducts] = useState([]);
     const [showModal, setShowModal] = useState(false);
-    const [updateProduct, setUpdateProduct] = useState(null);
-
+    const [productToUpdate, setProductToUpdate] = useState(null);
+    const [createNewProduct, setCreateNewProduct] = useState(false);
 
     const handleClose = () => setShowModal(false);
     const handleShow = () => setShowModal(true);
@@ -81,6 +81,31 @@ export default function AdminDashboardPage() {
 
         }
     }
+
+    const updateProduct = async (product) => {
+        let updatedProd = await adminService.updateProduct(product._id, product.title, product.desc, product.img, product.categories, product.price, product.inStock);
+        if (updatedProd.error){
+            // setAllUsers("Could not load users");
+        }
+        else{
+            fetchAllProducts();
+
+        }
+    }
+
+    const deleteProduct = async (productID) => {
+        let deleteProduct = await adminService.deleteProduct(productID);
+        if (deleteProduct.error){
+            console.log(deleteProduct.error)
+            // setAllUsers("Could not load users");
+        }
+        else{
+            fetchAllProducts();
+
+        }
+    }
+
+
     const getReadablePrice = (price) => {
         var dollars = price / 100;
         dollars = dollars.toLocaleString("en-US", {style:"currency", currency:"USD"});
@@ -143,6 +168,13 @@ export default function AdminDashboardPage() {
                     <Accordion.Item eventKey="1">
                         <Accordion.Header>Products</Accordion.Header>
                         <Accordion.Body>
+                        <div className='text-center mb-3'>
+                            <Button variant="success" onClick={() =>{
+                                            setCreateNewProduct(true);
+                                            handleShow();
+
+                                        }}>Create New Product</Button>
+                        </div>
                         {allProducts === "Could not load products" ? <p>{allProducts}</p> : 
                         allProducts.map((product, key) => {
                             return <div key={key}>
@@ -183,11 +215,13 @@ export default function AdminDashboardPage() {
 
                                     <ButtonGroup aria-label="Admin Actions">
                                         <Button variant="primary" onClick={() =>{
-                                            setUpdateProduct(product);
+                                            setProductToUpdate(product);
                                             handleShow();
 
                                         }}>Update</Button>
-                                        <Button variant="danger" onClick={() => {}}>Delete</Button>
+                                        <Button variant="danger" onClick={() => {
+                                            deleteProduct(product._id)
+                                        }}>Delete</Button>
                                         </ButtonGroup>
 
                                     
@@ -217,11 +251,13 @@ export default function AdminDashboardPage() {
             </>
             
             }
-            {updateProduct && <UpdateProductModal show={showModal} product={updateProduct} onHide={()=>{
+            {productToUpdate && <UpdateProductModal show={showModal} product={productToUpdate} onHide={()=>{
                 handleClose();
-                setUpdateProduct(null);
+                setProductToUpdate(null);
             }} onUpdatedProduct={(prod) => {
                 console.log("Updated prod: ", prod);
+                updateProduct(prod);
+
             }}/>}
             
         </Container>

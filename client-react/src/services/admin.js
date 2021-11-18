@@ -60,11 +60,40 @@ const adminService = {
     createProduct: async function(title, desc, img, categories, price, inStock){
 
     },
-    updateProduct: async function(title, desc, img, categories, price, inStock){
-
+    updateProduct: async function(productId, title, desc, img, categories, price, inStock){
+        try {
+            const response = await axios.put(`${process.env.REACT_APP_SERVER_URL}/products/${productId}`,{
+                title: title,
+                desc: desc,
+                img: img,
+                categories: categories,
+                price: price,
+                inStock
+            }, {
+                 headers: {
+                 'content-type': 'application/json'
+                },
+                withCredentials: true,
+                credentials: 'same-origin',
+            } )
+            return {response: response};
+        } catch (err) {
+            return {error:err.response ? err.response.data: "network error"};
+        }
     },
     deleteProduct: async function(productId){
-
+        try {
+            const response = await axios.delete(`${process.env.REACT_APP_SERVER_URL}/products/${productId}`, {
+                 headers: {
+                 'content-type': 'application/json'
+                },
+                withCredentials: true,
+                credentials: 'same-origin',
+            } )
+            return {response: response};
+        } catch (err) {
+            return {error:err.response ? err.response.data: "network error"};
+        }
     },
     getAllOrders: async function() {
 
