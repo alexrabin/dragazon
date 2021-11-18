@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
-import { Row,  Button, Modal} from 'react-bootstrap'
+import { Row,  Button, Modal, Spinner} from 'react-bootstrap'
 import adminService from '../services/admin';
 export default function OrderDetailsModal(props) {
     const [order, setOrder] = useState(null);
@@ -32,6 +32,9 @@ export default function OrderDetailsModal(props) {
                 <Modal.Title>Order Details</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                    {!order && <div className="text-center mx-auto w-100">
+                        <Spinner animation="border"/>
+                        </div>}
                     {order && <div>
                         
                         {order.products.map((p, key) => {

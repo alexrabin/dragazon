@@ -142,6 +142,13 @@ export default function AdminDashboardPage() {
         }
     }
 
+    const getTotalAmountOfProducts = (order) => {
+        const total = order.products.map(prod => {
+            return prod.quantity;
+        }).reduce((a,b) => a+b);
+        return total
+    }
+
     const getReadablePrice = (price) => {
         var dollars = price / 100;
         dollars = dollars.toLocaleString("en-US", {style:"currency", currency:"USD"});
@@ -293,9 +300,10 @@ export default function AdminDashboardPage() {
                                    <div className="p-3">
                                        <Row className="justify-content-between">
                                            <div className="col-auto">
-                                           <p>{order.products.length} Product(s): {order.status} <br/>
+                                           <p>{getTotalAmountOfProducts(order)} Product(s): {order.status.toUpperCase()} <br/>
                                    
-                                            {order._id}</p>
+                                            {order._id}
+                                            </p>
                                            </div>
                                            <div className="col-auto">
                                                 <Button variant="danger" style={{float:'right'}} onClick={() => {
