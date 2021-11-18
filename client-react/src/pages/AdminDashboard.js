@@ -5,6 +5,7 @@ import adminService from '../services/admin';
 
 import { useNavigate } from 'react-router-dom';
 import UpdateProductModal from '../components/UpdateProductModal';
+import CreateProductModal from '../components/CreateProductModal';
 export default function AdminDashboardPage() {
     const [profile, setProfile] = useState(null)
     const [allUsers, setAllUsers] = useState([]);
@@ -78,6 +79,17 @@ export default function AdminDashboardPage() {
         }
         else{
             fetchAllUsers();
+
+        }
+    }
+
+    const createProduct = async (product) => {
+        let createProd = await adminService.createProduct(product.title, product.desc, product.img, product.categories, product.price, product.inStock);
+        if (createProd.error){
+            // setAllUsers("Could not load users");
+        }
+        else{
+            fetchAllProducts();
 
         }
     }
@@ -235,7 +247,7 @@ export default function AdminDashboardPage() {
                         }
                         </Accordion.Body>
                     </Accordion.Item>
-                    <Accordion.Item eventKey="1">
+                    <Accordion.Item eventKey="2">
                         <Accordion.Header>Orders</Accordion.Header>
                         <Accordion.Body>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
@@ -251,6 +263,15 @@ export default function AdminDashboardPage() {
             </>
             
             }
+            {createNewProduct && <CreateProductModal show={showModal} onHide={()=>{
+                handleClose();
+                setCreateNewProduct(false);
+            }} onCreateProduct={(prod) => {
+                console.log("New prod: ", prod);
+                createProduct(prod);
+
+            }}/>}
+
             {productToUpdate && <UpdateProductModal show={showModal} product={productToUpdate} onHide={()=>{
                 handleClose();
                 setProductToUpdate(null);

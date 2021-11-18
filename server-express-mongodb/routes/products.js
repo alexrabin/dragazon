@@ -16,16 +16,21 @@ router.post("/", async function(req, res, next) {
       res.send('Must be logged in');
       return
     }
-
+    console.log(req.body);
     let title = req.body.title;
     let desc = req.body.desc;
     let img = req.body.img;
     let price = req.body.price;
     let categories = req.body.categories;
+    let inStock = req.body.inStock;
 
-    if (title === undefined || desc === undefined || img === undefined || price ===undefined){
-        return res.status(400).send("Title, description, image, and price are required.");
+    if (title === undefined || desc === undefined || img === undefined || price ===undefined, inStock === undefined){
+        return res.status(400).send("Title, description, image, in stock and price are required.");
     }
+
+    if (title.replace(' ','') === "" || desc.replace(' ','') === "" || img.replace(' ','') === "" || price.replace(' ','') ===""){
+      return res.status(400).send("Title, description, image, in stock and price are required.");
+  }
 
     let user = await authService.verifyUser(token);
     if (user && user.isAdmin){
@@ -35,6 +40,7 @@ router.post("/", async function(req, res, next) {
       newProd.desc = desc;
       newProd.img = img;
       newProd.price = price;
+      newProd.inStock = inStock;
       newProd.categories = categories ? categories.replace(' ','').split(',') : []
       newProd.save().then(prod => res.json(prod));
 

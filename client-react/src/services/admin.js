@@ -58,7 +58,25 @@ const adminService = {
         }
     },
     createProduct: async function(title, desc, img, categories, price, inStock){
-
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/products`,{
+                title: title,
+                desc: desc,
+                img: img,
+                categories: categories,
+                price: price,
+                inStock: inStock
+            }, {
+                 headers: {
+                 'content-type': 'application/json'
+                },
+                withCredentials: true,
+                credentials: 'same-origin',
+            } )
+            return {response: response};
+        } catch (err) {
+            return {error:err.response ? err.response.data: "network error"};
+        }
     },
     updateProduct: async function(productId, title, desc, img, categories, price, inStock){
         try {
