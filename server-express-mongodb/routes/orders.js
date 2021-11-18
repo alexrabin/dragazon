@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var OrderModel = require("../models/order");
 var UserModel = require("../models/users");
+var ProductsModel = require("../models/products");
 var authService = require('../services/auth');
 
 
@@ -25,7 +26,7 @@ router.get('/:id', async function(req,res,next){
       return res.status(401).send('Must be logged in.')
   }
   let user = await authService.verifyUser(token);
-    if (user || user.isAdmin){
+    if (user){
       try {
         var order = (await OrderModel.findById(req.params.id).exec()).toObject();
         if (order.userId === user._id || user.isAdmin){
@@ -39,7 +40,7 @@ router.get('/:id', async function(req,res,next){
             order.products = productItems;
             return res.json(order)
         }
-        return res.status(401).send("You don't own this order");
+        return res.status(402).send("You don't own this order");
     }
     catch (err){
         return res.status(401).send("Couldn't find order: "+err);

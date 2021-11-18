@@ -1,72 +1,68 @@
-import React, { useState, useRef } from 'react'
-import { Form,  Button, Modal} from 'react-bootstrap'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
+import { Row,  Button, Modal} from 'react-bootstrap'
+import adminService from '../services/admin';
 export default function OrderDetailsModal(props) {
+    const [order, setOrder] = useState(null);
 
-    const imageRef = useRef();
-    const titleRef = useRef();
-    const descRef = useRef();
-    const categoriesRef = useRef();
-    const priceRef = useRef();
-    const [inStock, setInStock] = useState(true)
+    const fetchOrder = useCallback(async () => {
+        let order = await adminService.getOrderDetails(props.orderID);
+            if (order.error){
+                console.log(order.error);
+                props.onHide();
+                return
+            }
+            
+            setOrder(order.response.data);
+
+      }, [])
+      useEffect(() => {
+    
+        fetchOrder();
+    }, [fetchOrder])
+
+    const getReadablePrice = (price) => {
+        var dollars = price / 100;
+        dollars = dollars.toLocaleString("en-US", {style:"currency", currency:"USD"});
+        return dollars;
+    }
 
     return (
         <Modal show={props.show} onHide={props.onHide} centered scrollable>
-                <Modal.Header>
-                <Modal.Title>Create New Product</Modal.Title>
+                <Modal.Header closeButton>
+                <Modal.Title>Order Details</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    
-                    <Form onSubmit={(event) =>{
-                        event.preventDefault();
+                    {order && <div>
+                        
+                        {order.products.map((p, key) => {
 
-                        props.onHide();
-                        var newProduct = {
-                            categories: categoriesRef.current.value,
-                            img: imageRef.current.value,
-                            desc: descRef.current.value,
-                            title: titleRef.current.value,
-                            inStock: inStock,
-                            price: priceRef.current.value
-                        }
-                        props.onCreateProduct(newProduct);
-                    }}>
-                            <Form.Group className="mb-3">
-                            <Form.Label>Image</Form.Label>
-                            <Form.Control ref={imageRef} required/>
-                            </Form.Group>
-                            <Form.Group className="mb-3">
-                            <Form.Label>Title</Form.Label>
-                            <Form.Control ref={titleRef} required />
-                            </Form.Group>
-                            <Form.Group className="mb-3">
-                            <Form.Label>Description</Form.Label>
-                            <Form.Control ref={descRef} required/>
-                            </Form.Group>
-                            <Form.Group className="mb-3">
-                            <Form.Label>Categories (Seperated by comma)</Form.Label>
-                            <Form.Control ref={categoriesRef} required />
-                            </Form.Group>
-                            <Form.Group className="mb-3">
-                            <Form.Label>Price in cents</Form.Label>
-                            <Form.Control ref={priceRef} required/>
-                            </Form.Group>
-                            <Form.Group className="mb-3">
-                            <Form.Check type="checkbox" label="In Stock" required checked ={inStock} onChange={(e) => {
-                                setInStock(e.target.checked)
-                            }} />
+                            return <div key={key}>
+                                <Row className="justify-content-between align-items-center">
+                                    <div className="col-auto">
+                                    <p>
+                                        {p.product.title} {p.quantity > 1 && `× ${p.quantity}`}
+                                    </p>
+                                    </div>
+                                    <div className="col-auto">
+                                    <img src={p.product.img} style={{width:200, }} className="mb-3 text-center mx-auto"/>
+                                    </div>
+                                </Row>
+                                <hr className="solid"/>
 
-                            </Form.Group>
-                            
-                <Button type="submit" variant="primary" className={"m-2"}>
-                    Create
-                </Button>
-                <Button variant="secondary" onClick={props.onHide}>
-                                Cancel
-                            </Button>
-                        </Form>           
+                            </div>
+                        })}
+                        <p>Total Price: {getReadablePrice(order.amount)}</p>
+
+                        
+                     </div>
+                        
+                    }
+                             
                 </Modal.Body>
                 <Modal.Footer>
-                
+                <Button variant="secondary" onClick={props.onHide}>
+                                Close
+                            </Button>
                 </Modal.Footer>
             </Modal>
     )

@@ -6,6 +6,7 @@ import adminService from '../services/admin';
 import { useNavigate } from 'react-router-dom';
 import UpdateProductModal from '../components/UpdateProductModal';
 import CreateProductModal from '../components/CreateProductModal';
+import OrderDetailsModal from '../components/OrderDetailsModal';
 export default function AdminDashboardPage() {
     const [profile, setProfile] = useState(null)
     const [allUsers, setAllUsers] = useState([]);
@@ -14,6 +15,7 @@ export default function AdminDashboardPage() {
     const [showModal, setShowModal] = useState(false);
     const [productToUpdate, setProductToUpdate] = useState(null);
     const [createNewProduct, setCreateNewProduct] = useState(false);
+    const [orderToShow, setOrderToShow] = useState(null);
 
     const handleClose = () => setShowModal(false);
     const handleShow = () => setShowModal(true);
@@ -283,7 +285,11 @@ export default function AdminDashboardPage() {
                         allOrders.map((order, key) => {
                             return <div key={key}>
 
-                                <Card>
+                                <Card style={{cursor:'pointer'}}onClick={()=>{
+
+                                    setOrderToShow(order._id);
+                                    handleShow();
+                                }}>
                                    <div className="p-3">
                                        <Row className="justify-content-between">
                                            <div className="col-auto">
@@ -334,6 +340,11 @@ export default function AdminDashboardPage() {
                 console.log("Updated prod: ", prod);
                 updateProduct(prod);
 
+            }}/>}
+
+            {orderToShow && <OrderDetailsModal orderID={orderToShow} show={showModal} onHide={()=>{
+                handleClose();
+                setOrderToShow(null);
             }}/>}
             
         </Container>
