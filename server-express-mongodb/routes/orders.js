@@ -13,7 +13,7 @@ router.get("/", async function(req, res, next) {
     }
     let user = await authService.verifyUser(token);
     if (user && user.isAdmin){
-      OrderModel.find({userId: user.id}).then(orders => res.json(orders));
+      OrderModel.find().then(orders => res.json(orders));
     }
     else {
       res.status(401);
