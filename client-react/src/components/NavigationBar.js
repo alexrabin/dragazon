@@ -38,7 +38,7 @@ export default function NavigationBar() {
          
           <Navbar.Brand>
             <a href="/">
-              <img src={logo} style={{ width: 140, marginTop: 0 }}></img>
+              <img src={logo} style={{ width: 140, marginTop: 0}}></img>
             </a>
           </Navbar.Brand>
           <Navbar.Toggle

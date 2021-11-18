@@ -1,12 +1,25 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Container, Form, Accordion, Button} from 'react-bootstrap'
+import { Container, Form, Accordion, Button, ButtonGroup, Badge, Row, Card} from 'react-bootstrap'
 import authService from '../services/auth';
 import adminService from '../services/admin';
 
 import { useNavigate } from 'react-router-dom';
+import UpdateProductModal from '../components/UpdateProductModal';
+import CreateProductModal from '../components/CreateProductModal';
+import OrderDetailsModal from '../components/OrderDetailsModal';
 export default function AdminDashboardPage() {
     const [profile, setProfile] = useState(null)
     const [allUsers, setAllUsers] = useState([]);
+    const [allProducts, setAllProducts] = useState([]);
+    const [allOrders, setAllOrders] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [productToUpdate, setProductToUpdate] = useState(null);
+    const [createNewProduct, setCreateNewProduct] = useState(false);
+    const [orderToShow, setOrderToShow] = useState(null);
+
+    const handleClose = () => setShowModal(false);
+    const handleShow = () => setShowModal(true);
+
     const navigate = useNavigate();
 
     const fetchAllUsers = async () => {
@@ -18,6 +31,27 @@ export default function AdminDashboardPage() {
                 setAllUsers(allUsers.response.data);
             }
     }
+
+    const fetchAllProducts = async () => {
+        let allProducts = await adminService.getAllProducts();
+            if (allProducts.error){
+                setAllProducts("Could not load products");
+            }
+            else{
+                setAllProducts(allProducts.response.data);
+            }
+    }
+
+    const fetchAllOrders = async () => {
+        let allOrders = await adminService.getAllOrders();
+            if (allOrders.error){
+                setAllOrders("Could not load products");
+            }
+            else{
+                setAllOrders(allOrders.response.data);
+            }
+    }
+
     const fetchProfile = useCallback(async () => {
         let user = await authService.getLoggedInUser();
             if (user.error){
@@ -29,6 +63,8 @@ export default function AdminDashboardPage() {
                 return
             }
             fetchAllUsers();
+            fetchAllProducts();
+            fetchAllOrders();
             setProfile(user.response.data);
 
       }, [navigate])
@@ -47,6 +83,76 @@ export default function AdminDashboardPage() {
             fetchAllUsers();
 
         }
+    }
+
+    const deleteUser = async (userID) => {
+        let deleteUser = await adminService.deleteUser(userID);
+        if (deleteUser.error){
+            console.log(deleteUser.error)
+            // setAllUsers("Could not load users");
+        }
+        else{
+            fetchAllUsers();
+
+        }
+    }
+
+    const createProduct = async (product) => {
+        let createProd = await adminService.createProduct(product.title, product.desc, product.img, product.categories, product.price, product.inStock);
+        if (createProd.error){
+            // setAllUsers("Could not load users");
+        }
+        else{
+            fetchAllProducts();
+
+        }
+    }
+
+    const updateProduct = async (product) => {
+        let updatedProd = await adminService.updateProduct(product._id, product.title, product.desc, product.img, product.categories, product.price, product.inStock);
+        if (updatedProd.error){
+            // setAllUsers("Could not load users");
+        }
+        else{
+            fetchAllProducts();
+
+        }
+    }
+
+    const deleteProduct = async (productID) => {
+        let deleteProduct = await adminService.deleteProduct(productID);
+        if (deleteProduct.error){
+            console.log(deleteProduct.error)
+            // setAllUsers("Could not load users");
+        }
+        else{
+            fetchAllProducts();
+
+        }
+    }
+    const deleteOrder = async (orderID) => {
+        let deleteOrder = await adminService.deleteOrder(orderID);
+        if (deleteOrder.error){
+            console.log(deleteOrder.error)
+            // setAllUsers("Could not load users");
+        }
+        else{
+            fetchAllOrders();
+
+        }
+    }
+
+    const getTotalAmountOfProducts = (order) => {
+        const total = order.products.map(prod => {
+            return prod.quantity;
+        }).reduce((a,b) => a+b);
+        return total
+    }
+
+    const getReadablePrice = (price) => {
+        var dollars = price / 100;
+        dollars = dollars.toLocaleString("en-US", {style:"currency", currency:"USD"});
+        return dollars;
     }
     return (
         <Container className="mt-5 mb-5">
@@ -85,7 +191,13 @@ export default function AdminDashboardPage() {
                                         <Form.Label>Admin</Form.Label>
                                         <Form.Control value={user.isAdmin} disabled />
                                     </Form.Group>
-                                    {!user.isAdmin && <Button variant="primary" onClick={() => makeUserAdmin(user._id)}>Make Admin</Button>}
+
+                                    <ButtonGroup aria-label="Admin Actions">
+                                        {!user.isAdmin && <Button variant="primary" onClick={() => makeUserAdmin(user._id)}>Make Admin</Button>}
+                                        <Button variant="danger" onClick={() => deleteUser(user._id)}>Delete</Button>
+                                        </ButtonGroup>
+
+                                    
                                     </Accordion.Body>
                                     </Accordion.Item>
 
@@ -97,22 +209,151 @@ export default function AdminDashboardPage() {
                         </Accordion.Body>
                     </Accordion.Item>
                     <Accordion.Item eventKey="1">
+                        <Accordion.Header>Products</Accordion.Header>
+                        <Accordion.Body>
+                        <div className='text-center mb-3'>
+                            <Button variant="success" onClick={() =>{
+                                            setCreateNewProduct(true);
+                                            handleShow();
+
+                                        }}>Create New Product</Button>
+                        </div>
+                        {allProducts === "Could not load products" ? <p>{allProducts}</p> : 
+                        <Accordion>
+                        {allProducts.map((product, key) => {
+                            return <div key={key}>
+
+                                
+                                    <Accordion.Item eventKey={key}>
+                                    <Accordion.Header>{product.title}</Accordion.Header>
+                                    <Accordion.Body>
+                                    <img src={product.img} style={{width:200, }} className="mb-3 text-center mx-auto"/>
+                                    <Form.Group className="mb-3">
+                                    <Form.Label>Image</Form.Label>
+                                    <Form.Control value={product.img} disabled />
+                                    </Form.Group>
+                                    <Form.Group className="mb-3">
+                                    <Form.Label>Title</Form.Label>
+                                    <Form.Control value={product.title} disabled />
+                                    </Form.Group>
+                                    <Form.Group className="mb-3">
+                                    <Form.Label>Description</Form.Label>
+                                    <Form.Control value={product.desc} disabled />
+                                    </Form.Group>
+                                    <Form.Group className="mb-1">
+                                    <Form.Label>Categories:</Form.Label>
+                                    <Row className="justify-content-start" style={{marginLeft:1, marginRight:1}}>
+                                    {product.categories && product.categories.map((category, cKey) => <Badge key={cKey}className="col-auto m-1" bg="dark" >{category}</Badge>)}
+
+                                    </Row>                                    
+                                    </Form.Group>
+                                    <Form.Group className="mb-3">
+                                    <Form.Label>Price</Form.Label>
+                                    <Form.Control value={getReadablePrice(product.price)} disabled />
+                                    </Form.Group>
+                                    <Form.Group className="mb-3">
+                                    <Form.Label>In Stock</Form.Label>
+                                    <Form.Control value={product.inStock} disabled />
+                                    </Form.Group>
+                                    <Form.Group className="mb-3">
+                                        <Form.Label>ID</Form.Label>
+                                        <Form.Control value={product._id} disabled />
+                                    </Form.Group>
+
+                                    <ButtonGroup aria-label="Admin Actions">
+                                        <Button variant="primary" onClick={() =>{
+                                            setProductToUpdate(product);
+                                            handleShow();
+
+                                        }}>Update</Button>
+                                        <Button variant="danger" onClick={() => {
+                                            deleteProduct(product._id)
+                                        }}>Delete</Button>
+                                        </ButtonGroup>
+
+                                    
+                                    </Accordion.Body>
+                                    </Accordion.Item>
+
+                                
+                                
+                                </div>
+                        })}
+                        
+                        </Accordion>
+                        }
+                        </Accordion.Body>
+                    </Accordion.Item>
+                    <Accordion.Item eventKey="2">
                         <Accordion.Header>Orders</Accordion.Header>
                         <Accordion.Body>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                        cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
-                        est laborum.
+                        {allOrders === "Could not load orders" ? <p>{allOrders}</p> : 
+                        
+                        allOrders.map((order, key) => {
+                            return <div key={key}>
+
+                                <Card style={{cursor:'pointer'}}onClick={()=>{
+
+                                    setOrderToShow(order._id);
+                                    handleShow();
+                                }}>
+                                   <div className="p-3">
+                                       <Row className="justify-content-between">
+                                           <div className="col-auto">
+                                           <p>{getTotalAmountOfProducts(order)} Product(s): {order.status.toUpperCase()} <br/>
+                                   
+                                            {order._id}
+                                            </p>
+                                           </div>
+                                           <div className="col-auto">
+                                                <Button variant="danger" style={{float:'right'}} onClick={() => {
+                                                    deleteOrder(order._id)
+                                                }}>Delete</Button>
+                                           </div>
+                                       </Row>
+                                   
+                                    
+                                    
+                                   </div>
+                                </Card>
+                                    
+
+                                
+                                
+                                </div>
+                        })
+                        
+                        }
+                        
+                        
                         </Accordion.Body>
                     </Accordion.Item>
                     </Accordion>
             </>
             
             }
-            
+            {createNewProduct && <CreateProductModal show={showModal} onHide={()=>{
+                handleClose();
+                setCreateNewProduct(false);
+            }} onCreateProduct={(prod) => {
+                console.log("New prod: ", prod);
+                createProduct(prod);
+
+            }}/>}
+
+            {productToUpdate && <UpdateProductModal show={showModal} product={productToUpdate} onHide={()=>{
+                handleClose();
+                setProductToUpdate(null);
+            }} onUpdatedProduct={(prod) => {
+                console.log("Updated prod: ", prod);
+                updateProduct(prod);
+
+            }}/>}
+
+            {orderToShow && <OrderDetailsModal orderID={orderToShow} show={showModal} onHide={()=>{
+                handleClose();
+                setOrderToShow(null);
+            }}/>}
             
         </Container>
     )
