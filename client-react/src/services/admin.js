@@ -114,13 +114,49 @@ const adminService = {
         }
     },
     getAllOrders: async function() {
-
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/orders`, {
+                 headers: {
+                 'content-type': 'application/json'
+                },
+                withCredentials: true,
+                credentials: 'same-origin',
+            } )
+            return {response: response};
+        } catch (err) {
+            return {error:err.response ? err.response.data: "network error"};
+        }
+    },
+    getOrderDetails: async function(orderId) {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/orders/${orderId}`, {
+                 headers: {
+                 'content-type': 'application/json'
+                },
+                withCredentials: true,
+                credentials: 'same-origin',
+            } )
+            return {response: response};
+        } catch (err) {
+            return {error:err.response ? err.response.data: "network error"};
+        }
     },
     updateOrder: async function(orderId, details){
 
     },
     deleteOrder: async function(orderId){
-
+        try {
+            const response = await axios.delete(`${process.env.REACT_APP_SERVER_URL}/orders/${orderId}`, {
+                 headers: {
+                 'content-type': 'application/json'
+                },
+                withCredentials: true,
+                credentials: 'same-origin',
+            } )
+            return {response: response};
+        } catch (err) {
+            return {error:err.response ? err.response.data: "network error"};
+        }
     }
 }
 export default adminService

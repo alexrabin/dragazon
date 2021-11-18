@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Container, Form, Accordion, Button, ButtonGroup, Badge, Row} from 'react-bootstrap'
+import { Container, Form, Accordion, Button, ButtonGroup, Badge, Row, Card} from 'react-bootstrap'
 import authService from '../services/auth';
 import adminService from '../services/admin';
 
@@ -10,6 +10,7 @@ export default function AdminDashboardPage() {
     const [profile, setProfile] = useState(null)
     const [allUsers, setAllUsers] = useState([]);
     const [allProducts, setAllProducts] = useState([]);
+    const [allOrders, setAllOrders] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [productToUpdate, setProductToUpdate] = useState(null);
     const [createNewProduct, setCreateNewProduct] = useState(false);
@@ -39,6 +40,16 @@ export default function AdminDashboardPage() {
             }
     }
 
+    const fetchAllOrders = async () => {
+        let allOrders = await adminService.getAllOrders();
+            if (allOrders.error){
+                setAllOrders("Could not load products");
+            }
+            else{
+                setAllOrders(allOrders.response.data);
+            }
+    }
+
     const fetchProfile = useCallback(async () => {
         let user = await authService.getLoggedInUser();
             if (user.error){
@@ -51,6 +62,7 @@ export default function AdminDashboardPage() {
             }
             fetchAllUsers();
             fetchAllProducts();
+            fetchAllOrders();
             setProfile(user.response.data);
 
       }, [navigate])
@@ -116,7 +128,17 @@ export default function AdminDashboardPage() {
 
         }
     }
+    const deleteOrder = async (orderID) => {
+        let deleteOrder = await adminService.deleteOrder(orderID);
+        if (deleteOrder.error){
+            console.log(deleteOrder.error)
+            // setAllUsers("Could not load users");
+        }
+        else{
+            fetchAllOrders();
 
+        }
+    }
 
     const getReadablePrice = (price) => {
         var dollars = price / 100;
@@ -256,13 +278,40 @@ export default function AdminDashboardPage() {
                     <Accordion.Item eventKey="2">
                         <Accordion.Header>Orders</Accordion.Header>
                         <Accordion.Body>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                        cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
-                        est laborum.
+                        {allOrders === "Could not load orders" ? <p>{allOrders}</p> : 
+                        
+                        allOrders.map((order, key) => {
+                            return <div key={key}>
+
+                                <Card>
+                                   <div className="p-3">
+                                       <Row className="justify-content-between">
+                                           <div className="col-auto">
+                                           <p>{order.products.length} Product(s): {order.status} <br/>
+                                   
+                                            {order._id}</p>
+                                           </div>
+                                           <div className="col-auto">
+                                                <Button variant="danger" style={{float:'right'}} onClick={() => {
+                                                    deleteOrder(order._id)
+                                                }}>Delete</Button>
+                                           </div>
+                                       </Row>
+                                   
+                                    
+                                    
+                                   </div>
+                                </Card>
+                                    
+
+                                
+                                
+                                </div>
+                        })
+                        
+                        }
+                        
+                        
                         </Accordion.Body>
                     </Accordion.Item>
                     </Accordion>
