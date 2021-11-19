@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Container, Form, Accordion, Button, ButtonGroup, Badge, Row, Card} from 'react-bootstrap'
+import { Container, Form, Accordion, Button, ButtonGroup, Badge, Row, Card, Tabs, Modal, Tab, Table} from 'react-bootstrap'
 import authService from '../services/auth';
 import adminService from '../services/admin';
 
@@ -8,7 +8,7 @@ import UpdateProductModal from '../components/UpdateProductModal';
 import CreateProductModal from '../components/CreateProductModal';
 import OrderDetailsModal from '../components/OrderDetailsModal';
 
-import { FaSyncAlt } from 'react-icons/fa';
+import { FaSyncAlt, FaPlus } from 'react-icons/fa';
 
 
 export default function AdminDashboardPage() {
@@ -20,6 +20,7 @@ export default function AdminDashboardPage() {
     const [productToUpdate, setProductToUpdate] = useState(null);
     const [createNewProduct, setCreateNewProduct] = useState(false);
     const [orderToShow, setOrderToShow] = useState(null);
+    const [userToDelete, setUserToDelete] = useState(null);
 
     const handleClose = () => setShowModal(false);
     const handleShow = () => setShowModal(true);
@@ -162,68 +163,95 @@ export default function AdminDashboardPage() {
         <Container className="mt-5 mb-5">
             <h1 className="mb-4">Admin Dashboard</h1>
             {profile && <>
-                <Accordion>
-                    <Accordion.Item eventKey="0">
-                        <Accordion.Header>Users</Accordion.Header>
-                        <Accordion.Body>
-                         <Button className="mt-1 mb-3" onClick={fetchAllUsers}><FaSyncAlt/></Button>   
+                <Tabs defaultActiveKey="users" id="uncontrolled-tab-example" className="mb-3 nav-pills nav-fill">
+                    <Tab eventKey="users" title="Users">
+                    <Button className="mt-1 mb-3" onClick={fetchAllUsers}><FaSyncAlt/></Button>   
                         {allUsers === "Could not load users" ? <p>{allUsers}</p> : 
-                        allUsers.map((user, key) => {
-                            return <div key={key}>
+                        <div className="text-center">
+                        <i>Double click a user to delete</i>
+                        <Table striped bordered hover responsive>
+                            <thead>
+                                <tr>
+                                <th>UID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Username</th>
+                                <th>Admin</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {allUsers.map((user,key)=>{
+                                    return <tr key={key} onDoubleClick={() => {
+                                        setUserToDelete(user);
+                                        setShowModal(true);
+                                    }}>
+                                        
+                                            <td>{user._id}</td>
+                                            <td>{user.name}</td>
+                                            <td>{user.email}</td>
+                                            <td>{user.username}</td>
+                                            <td>{user.isAdmin.toString()}</td>
 
-                                <Accordion>
-                                    <Accordion.Item eventKey="0">
-                                    <Accordion.Header>{user.name}</Accordion.Header>
-                                    <Accordion.Body>
+                                            
 
-                                    <Form.Group className="mb-3">
-                                    <Form.Label>Name</Form.Label>
-                                    <Form.Control value={user.name} disabled />
-                                    </Form.Group>
-                                    <Form.Group className="mb-3">
-                                        <Form.Label>ID</Form.Label>
-                                        <Form.Control value={user._id} disabled />
-                                    </Form.Group>
-                                    <Form.Group className="mb-3">
-                                        <Form.Label>Email</Form.Label>
-                                        <Form.Control value={user.email} disabled />
-                                    </Form.Group>
-                                    <Form.Group className="mb-3">
-                                        <Form.Label>Username</Form.Label>
-                                        <Form.Control value={user.username} disabled />
-                                    </Form.Group>
-                                    <Form.Group className="mb-3">
-                                        <Form.Label>Admin</Form.Label>
-                                        <Form.Control value={user.isAdmin} disabled />
-                                    </Form.Group>
+                                    </tr>
+                                })}
 
-                                    <ButtonGroup aria-label="Admin Actions">
-                                        {!user.isAdmin && <Button variant="primary" onClick={() => makeUserAdmin(user._id)}>Make Admin</Button>}
-                                        <Button variant="danger" onClick={() => deleteUser(user._id)}>Delete</Button>
-                                        </ButtonGroup>
+                            </tbody>
+                        </Table>
+                        </div>
+                    }
+                    </Tab>
+                    <Tab eventKey="orders" title="Orders">
+                    <Button className="mt-1 mb-3" onClick={fetchAllOrders}><FaSyncAlt/></Button>   
 
-                                    
-                                    </Accordion.Body>
-                                    </Accordion.Item>
+                    {allOrders === "Could not load orders" ? <p>{allOrders}</p> : 
 
-                                </Accordion>
+                    allOrders.map((order, key) => {
+                        return <div key={key} className="mb-2">
+
+                            <Card style={{cursor:'pointer'}}onClick={()=>{
+
+                                setOrderToShow(order._id);
+                                handleShow();
+                            }}>
+                            <div className="p-3">
+                                <Row className="justify-content-between">
+                                    <div className="col-auto">
+                                    <p>{getTotalAmountOfProducts(order)} Product(s): {order.status.toUpperCase()} <br/>
+                            
+                                        {order._id}
+                                        </p>
+                                    </div>
+                                    <div className="col-auto">
+                                            <Button variant="danger" style={{float:'right'}} onClick={() => {
+                                                deleteOrder(order._id)
+                                            }}>Delete</Button>
+                                    </div>
+                                </Row>
+                            
                                 
-                                </div>
-                        })
-                        }
-                        </Accordion.Body>
-                    </Accordion.Item>
-                    <Accordion.Item eventKey="1">
-                        <Accordion.Header>Products</Accordion.Header>
-                        <Accordion.Body>
-                        <div className='mb-3 row justify-content-between'>
+                                
+                            </div>
+                            </Card>
+                                
+
+                            
+                            
+                            </div>
+                    })
+
+                    }
+                    </Tab>
+                    <Tab eventKey="products" title="Products">
+                    <div className='mb-3 row justify-content-between w-100' style={{marignRight:1, marginLeft:1}}>
                             <Button className="col-auto" onClick={fetchAllProducts}><FaSyncAlt/></Button>   
 
                             <Button className="col-auto" variant="success" onClick={() =>{
                                             setCreateNewProduct(true);
                                             handleShow();
 
-                                        }}>Create New Product</Button>
+                                        }}><FaPlus/></Button>
                         </div>
 
                         {allProducts === "Could not load products" ? <p>{allProducts}</p> : 
@@ -290,55 +318,8 @@ export default function AdminDashboardPage() {
                         
                         </Accordion>
                         }
-                        </Accordion.Body>
-                    </Accordion.Item>
-                    <Accordion.Item eventKey="2">
-                        <Accordion.Header>Orders</Accordion.Header>
-                        <Accordion.Body>
-                        <Button className="mt-1 mb-3" onClick={fetchAllOrders}><FaSyncAlt/></Button>   
-
-                        {allOrders === "Could not load orders" ? <p>{allOrders}</p> : 
-                        
-                        allOrders.map((order, key) => {
-                            return <div key={key}>
-
-                                <Card style={{cursor:'pointer'}}onClick={()=>{
-
-                                    setOrderToShow(order._id);
-                                    handleShow();
-                                }}>
-                                   <div className="p-3">
-                                       <Row className="justify-content-between">
-                                           <div className="col-auto">
-                                           <p>{getTotalAmountOfProducts(order)} Product(s): {order.status.toUpperCase()} <br/>
-                                   
-                                            {order._id}
-                                            </p>
-                                           </div>
-                                           <div className="col-auto">
-                                                <Button variant="danger" style={{float:'right'}} onClick={() => {
-                                                    deleteOrder(order._id)
-                                                }}>Delete</Button>
-                                           </div>
-                                       </Row>
-                                   
-                                    
-                                    
-                                   </div>
-                                </Card>
-                                    
-
-                                
-                                
-                                </div>
-                        })
-                        
-                        }
-                        
-                        
-                        </Accordion.Body>
-                    </Accordion.Item>
-                    </Accordion>
+                    </Tab>
+                </Tabs>
             </>
             
             }
@@ -364,6 +345,34 @@ export default function AdminDashboardPage() {
                 handleClose();
                 setOrderToShow(null);
             }}/>}
+
+            {userToDelete && <Modal show={showModal} onHide={()=>{
+                handleClose();
+                setUserToDelete(null);
+            }} centered scrollable>
+                <Modal.Header>
+                <Modal.Title>Delete User?</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Are you usre you want to delete {userToDelete.name}'s account?</p>
+                             
+                </Modal.Body>
+                <Modal.Footer>
+                <Button variant="secondary" onClick={()=>{
+                        handleClose();
+                        setUserToDelete(null);
+                    }}>
+                                Cancel
+                            </Button>
+                    <Button variant="danger" onClick={()=>{
+                        deleteUser(userToDelete._id);
+                        handleClose();
+                        setUserToDelete(null);
+                    }}>
+                                Delete
+                            </Button>
+                </Modal.Footer>
+            </Modal>}
             
         </Container>
     )
