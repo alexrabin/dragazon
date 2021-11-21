@@ -354,7 +354,7 @@ export default function AdminDashboardPage() {
                 <Modal.Title>Delete User?</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <p>Are you usre you want to delete {userToDelete.name}'s account?</p>
+                    <p>Are you sure you want to delete {userToDelete.name}'s account?</p>
                              
                 </Modal.Body>
                 <Modal.Footer>
