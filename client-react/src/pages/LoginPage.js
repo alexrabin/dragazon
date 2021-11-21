@@ -66,9 +66,9 @@ export default function LoginPage() {
     // <Container  className="mt-5 mb-5 mx-auto">
     
 
-    <Container className="col-md-6">
+    <Container className="col-md-10 mx-auto col-lg-10 col-xl-6">
         <Form
-            className="col-md-6 bg-light"
+            className="col-md-6 mb-5 mx-auto"
            onSubmit={(e) => {
           submitHandler(e);
         }}
@@ -159,7 +159,7 @@ export default function LoginPage() {
           </Button>
         </div>
       {/* </Form> */}
-      <div className="text-center">
+      <div className="text-center mt-4">
         {showLogin ? (
           <p>
             Don't have an account?{" "}
