@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import {Container, Row, Card, ListGroupItem,ListGroup} from 'react-bootstrap'
-import logo from "../assets/dragazonlogo.png";
 import adminService from '../services/admin';
 import "./HomePage.css";
 

@@ -63,28 +63,15 @@ export default function LoginPage() {
     setErrorMsg(null);
   };
   return (
-    // <Container  className="mt-5 mb-5 mx-auto">
-    
-
     <Container className="col-md-10 mx-auto col-lg-10 col-xl-6">
-        <Form
-            className="col-md-6 mb-5 mx-auto"
-           onSubmit={(e) => {
+      <Form
+        className="col-md-6 mb-5 mx-auto"
+        onSubmit={(e) => {
           submitHandler(e);
         }}
       >
+        <h1 className="text-center">{showLogin ? "Login" : "Sign Up"}</h1>
 
-
-
-      <h1 className="text-center">{showLogin ? "Login" : "Sign Up"}</h1>
-
-      {/* <Form className="mt-5 mb-5 mx-auto" onSubmit={e => { */}
-      {/* <Form */}
-        {/* className="col-md-6 bg-light" */}
-        {/* onSubmit={(e) => { */}
-          {/* submitHandler(e); */}
-        {/* }} */}
-      {/* > */}
         {!showLogin && (
           <Form.Group className="mb-3" controlId="name">
             <Form.Label>Name</Form.Label>
@@ -103,7 +90,6 @@ export default function LoginPage() {
               ref={emailInput}
               type="email"
               placeholder="Email"
-            
               required
               isInvalid={errorMsg && errorMsg.includes("The email")}
             />
@@ -153,43 +139,47 @@ export default function LoginPage() {
           <Button
             variant="danger"
             type="submit"
-            style={{ paddingRight: 50, paddingLeft: 50, borderRadius:"1% 25% / 80% " }}
+            style={{
+              paddingRight: 50,
+              paddingLeft: 50,
+              borderRadius: "1% 25% / 80% ",
+            }}
           >
             {showLogin ? "Login" : "Sign Up"}
           </Button>
         </div>
-      {/* </Form> */}
-      <div className="text-center mt-4">
-        {showLogin ? (
-          <p>
-            Don't have an account?{" "}
-            <a
-              style={{ color: "blue", cursor: "pointer" }}
-              onClick={() => {
-                reset();
-                setShowLogin(!showLogin);
-              }}
-            >
-              Sign up here
-            </a>
-            .
-          </p>
-        ) : (
-          <p>
-            Already have an account?{" "}
-            <a
-              style={{ color: "blue", cursor: "pointer"}}
-              onClick={() => {
-                reset();
-                setShowLogin(!showLogin);
-              }}
-            >
-              Login here
-            </a>
-            .
-          </p>
-        )}
-      </div>
+        {/* </Form> */}
+        <div className="text-center mt-4">
+          {showLogin ? (
+            <p>
+              Don't have an account?{" "}
+              <a
+                style={{ color: "blue", cursor: "pointer" }}
+                onClick={() => {
+                  reset();
+                  setShowLogin(!showLogin);
+                }}
+              >
+                Sign up here
+              </a>
+              .
+            </p>
+          ) : (
+            <p>
+              Already have an account?{" "}
+              <a
+                style={{ color: "blue", cursor: "pointer" }}
+                onClick={() => {
+                  reset();
+                  setShowLogin(!showLogin);
+                }}
+              >
+                Login here
+              </a>
+              .
+            </p>
+          )}
+        </div>
       </Form>
     </Container>
   );
