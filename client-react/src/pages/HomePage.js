@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import {Col, Container, Row, Placeholder, Card} from 'react-bootstrap'
+import {Col, Container, Row, Placeholder, Card, ListGroupItem,ListGroup} from 'react-bootstrap'
 
 
 export default function HomePage() {
@@ -10,23 +10,28 @@ export default function HomePage() {
             <h1 className="mb-4">Welcome to Dragazon</h1>
             <Row className="justify-content-center mx-auto gy-4 gx-4">
                 {loading && blank_array.map((i, key)=> (
-                    
-                        <Card className="col-auto p-4 m-3" key={key} style={{ width: '18rem' }}>
-                            {/* <Card.Img variant="top" src={`https://source.unsplash.com/1600x900/?dragon`} /> */}
-                            <Placeholder.Button variant="danger" size="lg" />
+                 <Card style={{ width: '18rem' }}>
+                 <Card.Img variant="top" src="" />
+                 <Card.Body>
+                   <Card.Title>Card Title</Card.Title>
+                   <Card.Text>
+                     Some quick example text to build on the card title and make up the bulk of
+                     the card's content.
+                   </Card.Text>
+                 </Card.Body>
+                 <ListGroup className="list-group-flush">
+                   <ListGroupItem>Cras justo odio</ListGroupItem>
+                   <ListGroupItem>Dapibus ac facilisis in</ListGroupItem>
+                   <ListGroupItem>Vestibulum at eros</ListGroupItem>
+                 </ListGroup>
+                 <Card.Body>
+                   <Card.Link href="#">Card Link</Card.Link>
+                   <Card.Link href="#">Another Link</Card.Link>
+                 </Card.Body>
+               </Card>   
+                       
 
-                            <Card.Body>
-                            <Placeholder as={Card.Title} animation="glow">
-                                <Placeholder xs={6} />
-                            </Placeholder>
-                            <Placeholder as={Card.Text} animation="glow">
-                                <Placeholder xs={7} /> <Placeholder xs={4} /> <Placeholder xs={4} />{' '}
-                                <Placeholder xs={6} /> <Placeholder xs={8} />
-                            </Placeholder>
-                            {/* <Placeholder.Button variant="primary" xs={6} /> */}
-                            </Card.Body>
-                        </Card>
-                    
+
                 ))}
 
                 {!loading && <h1>Showing Inventory</h1>}
