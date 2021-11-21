@@ -151,9 +151,9 @@ export default function LoginPage() {
         )}
         <div className="text-center">
           <Button
-            variant="primary"
+            variant="danger"
             type="submit"
-            style={{ paddingRight: 50, paddingLeft: 50, borderRadius:"1% 30% / 80% " }}
+            style={{ paddingRight: 50, paddingLeft: 50, borderRadius:"1% 25% / 80% " }}
           >
             {showLogin ? "Login" : "Sign Up"}
           </Button>
