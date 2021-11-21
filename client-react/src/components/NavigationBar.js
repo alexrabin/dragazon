@@ -3,7 +3,6 @@ import {
   Navbar,
   Container,
   Nav,
-  NavDropdown,
   Offcanvas,
 } from "react-bootstrap";
 import authService from "../services/auth";
