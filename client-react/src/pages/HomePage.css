@@ -1,0 +1,11 @@
+.card img {
+    display: block;
+    max-width:100%;
+    height: 250px;
+    object-fit:cover;
+  }
+
+.card {
+padding-right: 0px;
+padding-left: 0px;
+}

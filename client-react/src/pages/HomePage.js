@@ -1,22 +1,40 @@
-import React, { useState } from 'react'
-import {Col, Container, Row, Placeholder, Card, ListGroupItem,ListGroup} from 'react-bootstrap'
+import React, { useState, useEffect } from 'react'
+import {Container, Row, Card, ListGroupItem,ListGroup} from 'react-bootstrap'
 import logo from "../assets/dragazonlogo.png";
+import adminService from '../services/admin';
+import "./HomePage.css";
 
 export default function HomePage() {
     const blank_array = "12345678".split('');
     const [loading, setLoading] = useState(true);
+    const [allProducts, setAllProducts] = useState([]);
+
+    const fetchAllProducts = async () => {
+      let allProducts = await adminService.getAllProducts();
+          if (allProducts.error){
+              setAllProducts("Could not load products");
+          }
+          else{
+              setAllProducts(allProducts.response.data);
+          }
+    }
+
+      useEffect(() => {
+      
+        fetchAllProducts();
+    }, [])
+
     return (
         <Container className="text-center mt-5 mb-5">
             <h1 className="mb-4">Welcome to Dragazon</h1>
             <Row className="justify-content-center mx-auto gy-4 gx-4">
-                {loading && blank_array.map((i, key)=> (
-                 <Card style={{ width: '18rem' }}>
-                 <Card.Img variant="top" src={logo} />
+                {loading && allProducts.map((product, key)=> (
+                 <Card style={{ width: '18rem', margin:10}} key={key}>
+                 <Card.Img variant="top" src={product.img} className="w-100" style={{contain:""}}/>
                  <Card.Body>
-                   <Card.Title>Card Title</Card.Title>
+                   <Card.Title>{product.title}</Card.Title>
                    <Card.Text>
-                     Some quick example text to build on the card title and make up the bulk of
-                     the card's content.
+                     {product.desc}
                    </Card.Text>
                  </Card.Body>
                  <ListGroup className="list-group-flush">
