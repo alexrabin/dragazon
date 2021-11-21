@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import {Col, Container, Row, Placeholder, Card, ListGroupItem,ListGroup} from 'react-bootstrap'
-
+import logo from "../assets/dragazonlogo.png";
 
 export default function HomePage() {
     const blank_array = "12345678".split('');
@@ -11,7 +11,7 @@ export default function HomePage() {
             <Row className="justify-content-center mx-auto gy-4 gx-4">
                 {loading && blank_array.map((i, key)=> (
                  <Card style={{ width: '18rem' }}>
-                 <Card.Img variant="top" src="" />
+                 <Card.Img variant="top" src={logo} />
                  <Card.Body>
                    <Card.Title>Card Title</Card.Title>
                    <Card.Text>
