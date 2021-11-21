@@ -20,7 +20,7 @@ export default function AdminDashboardPage() {
     const [productToUpdate, setProductToUpdate] = useState(null);
     const [createNewProduct, setCreateNewProduct] = useState(false);
     const [orderToShow, setOrderToShow] = useState(null);
-    const [userToDelete, setUserToDelete] = useState(null);
+    const [userToEdit, setUserToEdit] = useState(null);
 
     const handleClose = () => setShowModal(false);
     const handleShow = () => setShowModal(true);
@@ -168,7 +168,7 @@ export default function AdminDashboardPage() {
                     <Button className="mt-1 mb-3" onClick={fetchAllUsers}><FaSyncAlt/></Button>   
                         {allUsers === "Could not load users" ? <p>{allUsers}</p> : 
                         <div className="text-center">
-                        <i>Double click a user to delete</i>
+                        <i>Double click a user for actions</i>
                         <Table striped bordered hover responsive>
                             <thead>
                                 <tr>
@@ -182,7 +182,7 @@ export default function AdminDashboardPage() {
                             <tbody>
                                 {allUsers.map((user,key)=>{
                                     return <tr key={key} onDoubleClick={() => {
-                                        setUserToDelete(user);
+                                        setUserToEdit(user);
                                         setShowModal(true);
                                     }}>
                                         
@@ -346,32 +346,31 @@ export default function AdminDashboardPage() {
                 setOrderToShow(null);
             }}/>}
 
-            {userToDelete && <Modal show={showModal} onHide={()=>{
+            {userToEdit && <Modal show={showModal} onHide={()=>{
                 handleClose();
-                setUserToDelete(null);
+                setUserToEdit(null);
             }} centered scrollable>
-                <Modal.Header>
-                <Modal.Title>Delete User?</Modal.Title>
+                <Modal.Header closeButton>
+                <Modal.Title>Edit User</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <p>Are you sure you want to delete {userToDelete.name}'s account?</p>
-                             
-                </Modal.Body>
-                <Modal.Footer>
-                <Button variant="secondary" onClick={()=>{
+                    <ButtonGroup>
+                <Button variant="danger" onClick={()=>{
+                        deleteUser(userToEdit._id);
                         handleClose();
-                        setUserToDelete(null);
-                    }}>
-                                Cancel
-                            </Button>
-                    <Button variant="danger" onClick={()=>{
-                        deleteUser(userToDelete._id);
-                        handleClose();
-                        setUserToDelete(null);
+                        setUserToEdit(null);
                     }}>
                                 Delete
                             </Button>
-                </Modal.Footer>
+                {!userToEdit.isAdmin && <Button variant="primary" onClick={()=>{
+                        makeUserAdmin(userToEdit._id);
+                        handleClose();
+                        setUserToEdit(null);
+                    }}>
+                                Make Admin
+                            </Button>}    
+                            </ButtonGroup>         
+                </Modal.Body>
             </Modal>}
             
         </Container>
