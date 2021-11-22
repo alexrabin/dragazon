@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import {Container, Row, Card, ListGroupItem,ListGroup, Spinner} from 'react-bootstrap'
 import adminService from '../services/admin';
+import logo from "../assets/dragazonlogo.png";
+
 import "./HomePage.css";
 
 export default function HomePage() {
