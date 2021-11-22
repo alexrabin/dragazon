@@ -153,7 +153,7 @@ export default function LoginPage() {
           {showLogin ? (
             <p>
               Don't have an account?{" "}
-              <a
+              <a href
                 style={{ color: "blue", cursor: "pointer" }}
                 onClick={() => {
                   reset();
@@ -167,7 +167,7 @@ export default function LoginPage() {
           ) : (
             <p>
               Already have an account?{" "}
-              <a
+              <a href
                 style={{ color: "blue", cursor: "pointer" }}
                 onClick={() => {
                   reset();

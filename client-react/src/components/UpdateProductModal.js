@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Form,  Button, Modal} from 'react-bootstrap'
-import authService from '../services/auth';
 export default function UpdateProductModal(props) {
 
     const imageRef = useRef();
@@ -17,7 +16,7 @@ export default function UpdateProductModal(props) {
             descRef.current.value = props.product.desc;
             categoriesRef.current.value = props.product.categories.join(',');
             priceRef.current.value = props.product.price;
-    }, [])
+    })
 
     return (
         <Modal show={props.show} onHide={props.onHide} centered scrollable>
