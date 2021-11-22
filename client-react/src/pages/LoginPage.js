@@ -143,6 +143,8 @@ export default function LoginPage() {
               paddingRight: 50,
               paddingLeft: 50,
               borderRadius: "1% 25% / 80% ",
+              color:"ivory",
+              fontWeight:"700",
             }}
           >
             {showLogin ? "Login" : "Sign Up"}

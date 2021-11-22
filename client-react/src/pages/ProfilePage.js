@@ -21,7 +21,7 @@ export default function ProfilePage() {
     }, [fetchProfile])
     return (
         <Container className="mt-5 mb-5">
-            <h1 className="mb-4 text-center">Profile</h1>
+            <h1 className="mb-4 text-center" >Profile</h1>
             {profile && <><Form.Group className="mb-3">
                 <Form.Label>Name</Form.Label>
                 <Form.Control value={profile.name} disabled />
