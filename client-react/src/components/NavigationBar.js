@@ -37,7 +37,7 @@ export default function NavigationBar() {
          
           <Navbar.Brand>
             <a href="/">
-              <img src={logo} style={{ width: 140, marginTop: 0}}></img>
+              <img alt="Dragazon Logo" src={logo} style={{ width: 140, marginTop: 0}}></img>
             </a>
           </Navbar.Brand>
           <Navbar.Toggle
@@ -55,7 +55,7 @@ export default function NavigationBar() {
              
               <Offcanvas.Title id="offcanvasNavbarLabel">
                 <a href="/">
-                  <img src={logo} style={{ width: 140, marginTop: 0 }}></img>
+                  <img src={logo} alt="Dragazon Logo" style={{ width: 140, marginTop: 0 }}></img>
                 </a>
               </Offcanvas.Title>
             </Offcanvas.Header>

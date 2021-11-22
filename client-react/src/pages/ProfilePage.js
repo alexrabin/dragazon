@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import {Col, Container, Row, Placeholder, Card, Form} from 'react-bootstrap'
+import { Container,Form} from 'react-bootstrap'
 import authService from '../services/auth';
 import { useNavigate } from 'react-router-dom';
 export default function ProfilePage() {

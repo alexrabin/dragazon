@@ -263,7 +263,7 @@ export default function AdminDashboardPage() {
                                     <Accordion.Item eventKey={key}>
                                     <Accordion.Header>{product.title}</Accordion.Header>
                                     <Accordion.Body>
-                                    <img src={product.img} style={{width:200, }} className="mb-3 text-center mx-auto"/>
+                                    <img src={product.img}  alt={`${product.title}`} style={{width:200, }} className="mb-3 text-center mx-auto"/>
                                     <Form.Group className="mb-3">
                                     <Form.Label>Image</Form.Label>
                                     <Form.Control value={product.img} disabled />

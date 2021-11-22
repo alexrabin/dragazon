@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Row,  Button, Modal, Spinner} from 'react-bootstrap'
 import adminService from '../services/admin';
 export default function OrderDetailsModal(props) {
@@ -14,7 +14,7 @@ export default function OrderDetailsModal(props) {
             
             setOrder(order.response.data);
 
-      }, [])
+      }, [props])
       useEffect(() => {
     
         fetchOrder();
@@ -47,7 +47,7 @@ export default function OrderDetailsModal(props) {
                                     </p>
                                     </div>
                                     <div className="col-auto">
-                                    <img src={p.product.img} style={{width:200, }} className="mb-3 text-center mx-auto"/>
+                                    <img alt={`${p.product.title}`} src={p.product.img} style={{width:200, }} className="mb-3 text-center mx-auto"/>
                                     </div>
                                 </Row>
                                 <hr className="solid"/>
