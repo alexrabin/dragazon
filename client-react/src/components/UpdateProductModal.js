@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { Form,  Button, Modal} from 'react-bootstrap'
+import React, { useState, useRef, useEffect } from 'react';
+import { Form,  Button, Modal} from 'react-bootstrap';
 export default function UpdateProductModal(props) {
 
     const imageRef = useRef();
