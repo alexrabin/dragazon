@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Container, Row, Card, ListGroupItem,ListGroup, Spinner} from 'react-bootstrap';
+import {Container, Row, Card, ListGroupItem,ListGroup, Spinner, Carousel} from 'react-bootstrap';
 import adminService from '../services/admin';
 import { useNavigate } from "react-router-dom";
 
@@ -41,13 +41,31 @@ export default function HomePage() {
             {loading && <div className="text-center mx-auto w-100">
                         <Spinner animation="border"/>
                         </div>}
-
+            {!loading && <Carousel fade className="mb-5">
+              
+                {allProducts.slice(0,3).map((product, key)=> (
+                  <Carousel.Item key={key} onClick={() => {
+                    navigate('/product', { state: {product} });
+                  }}>
+                      <img
+                        className="d-block w-100"
+                        src={product.img}
+                        alt={product.title}
+                        style={{height: 400, objectFit:'cover'}}
+                      />
+                      <Carousel.Caption>
+                        <h3>{product.title}</h3>
+                        <p>{product.desc}</p>
+                      </Carousel.Caption>
+                  </Carousel.Item>
+                ))}
+              </Carousel>}
             <Row className="justify-content-center mx-auto gy-4 gx-4">
-                {!loading && allProducts.map((product, key)=> (
-                 <Card style={{ width: '18rem', margin:10}} key={key}>
-                 <Card.Img variant="top" src={product.img} className="w-100" style={{contain:""}} onClick={() => {
-                   navigate('/product', { state: {product} });
-                 }}/>
+                {!loading && allProducts.slice(3).map((product, key)=> (
+                 <Card style={{ width: '18rem', margin:10}} key={key} onClick={() => {
+                  navigate('/product', { state: {product} });
+                }}>
+                 <Card.Img variant="top" src={product.img} className="w-100" style={{contain:""}}/>
                  <Card.Body>
                    <Card.Title>{product.title}</Card.Title>
                    <Card.Text>
