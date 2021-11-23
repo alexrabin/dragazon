@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import {Container, Row, Card, ListGroupItem,ListGroup, Spinner} from 'react-bootstrap'
+import React, { useState, useEffect } from 'react';
+import {Container, Row, Card, ListGroupItem,ListGroup, Spinner} from 'react-bootstrap';
 import adminService from '../services/admin';
 import { useNavigate } from "react-router-dom";
 

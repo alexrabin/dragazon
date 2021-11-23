@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import { Row,  Button, Modal, Spinner} from 'react-bootstrap'
+import React, { useState, useEffect, useCallback } from 'react';
+import { Row,  Button, Modal, Spinner} from 'react-bootstrap';
 import adminService from '../services/admin';
 export default function OrderDetailsModal(props) {
     const [order, setOrder] = useState(null);
