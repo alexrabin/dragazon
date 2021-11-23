@@ -161,7 +161,7 @@ export default function AdminDashboardPage() {
     }
     return (
         <Container className="mt-5 mb-5">
-            <h1 className="mb-4" style={{color: 'red', textAlign: 'center'}}>Admin Dashboard</h1>
+            <h1 className="mb-4" style={{color: 'rgb(170,1,20)', textAlign: 'center'}}>Admin Dashboard</h1>
             {profile && <>
                 <Tabs defaultActiveKey="users" id="uncontrolled-tab-example" className="mb-3 nav-pills nav-fill">
                     <Tab eventKey="users" title="Users">

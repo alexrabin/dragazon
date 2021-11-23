@@ -13,7 +13,7 @@ export default function ProductPage() {
         <Container className="mt-3">
             <div>
                 <Row className="justify-content-center ">
-                <div className="col-md-4 mb-3">
+                <div className="col-md-4 mb-3" style={{color:'ivory'}}>
                     <h3>{state.product.title}</h3>
                     <hr/>
                     <p>{state.product.desc}</p>
