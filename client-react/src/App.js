@@ -6,6 +6,7 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import ProfilePage from "./pages/ProfilePage";
 import AdminDashboardPage from "./pages/AdminDashboard";
+import ProductPage from "./pages/ProductPage";
 function App() {
   return (
     <div className="App">
@@ -15,6 +16,7 @@ function App() {
         <Route path="/login" exact element={ <LoginPage/>}/>
         <Route path="/profile" exact element={ <ProfilePage/>}/>
         <Route path="/admindashboard" exact element={ <AdminDashboardPage/>}/>
+        <Route path="/product" exact element={ <ProductPage/>}/>
 
       </Routes>
     </div>
