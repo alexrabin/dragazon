@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import { Container, Form, Accordion, Button, ButtonGroup, Badge, Row, Card, Tabs, Modal, Tab, Table} from 'react-bootstrap'
+import React, { useState, useEffect, useCallback } from 'react';
+import { Container, Form, Accordion, Button, ButtonGroup, Badge, Row, Card, Tabs, Modal, Tab, Table} from 'react-bootstrap';
 import authService from '../services/auth';
 import adminService from '../services/admin';
 
