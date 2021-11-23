@@ -161,16 +161,16 @@ export default function AdminDashboardPage() {
     }
     return (
         <Container className="mt-5 mb-5">
-            <h1 className="mb-4">Admin Dashboard</h1>
+            <h1 className="mb-4" style={{color: 'red', textAlign: 'center'}}>Admin Dashboard</h1>
             {profile && <>
                 <Tabs defaultActiveKey="users" id="uncontrolled-tab-example" className="mb-3 nav-pills nav-fill">
                     <Tab eventKey="users" title="Users">
                     <Button className="mt-1 mb-3" onClick={fetchAllUsers}><FaSyncAlt/></Button>   
                         {allUsers === "Could not load users" ? <p>{allUsers}</p> : 
-                        <div className="text-center">
+                        <div className="text-center" style={{color: 'ivory'}}>
                         <i>Double click a user for actions</i>
-                        <Table striped bordered hover responsive>
-                            <thead>
+                        <Table striped bordered hover responsive style={{color: 'ivory'}}>
+                            <thead >
                                 <tr>
                                 <th>UID</th>
                                 <th>Name</th>

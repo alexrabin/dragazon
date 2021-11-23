@@ -63,14 +63,14 @@ export default function LoginPage() {
     setErrorMsg(null);
   };
   return (
-    <Container className="col-md-10 mx-auto col-lg-10 col-xl-6">
+    <Container className="col-md-10 mx-auto col-lg-10 col-xl-6" style={{color: 'ivory'}}>
       <Form
         className="col-md-6 mb-5 mx-auto"
         onSubmit={(e) => {
           submitHandler(e);
         }}
       >
-        <h1 className="text-center">{showLogin ? "Login" : "Sign Up"}</h1>
+        <h1 className="text-center" style={{color: 'red'}}>{showLogin ? "Login" : "Sign Up"}</h1>
 
         {!showLogin && (
           <Form.Group className="mb-3" controlId="name">

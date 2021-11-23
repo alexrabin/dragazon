@@ -37,7 +37,7 @@ export default function HomePage() {
 
     return (
         <Container className="text-center mb-5">
-            <h1 className="mb-4">Welcome to Dragazon</h1>
+            <h1 className="mb-4" style={{color: "red"}}>Welcome to Dragazon</h1>
             {loading && <div className="text-center mx-auto w-100">
                         <Spinner animation="border"/>
                         </div>}
