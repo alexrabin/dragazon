@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import {Container, Row, Card, Button} from 'react-bootstrap'
+import React, { } from 'react'
+import {Container, Row, Button} from 'react-bootstrap'
 import { useLocation } from 'react-router-dom';
 import mainService from '../services/main';
 export default function ProductPage() {
