@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {Container, Row, Card, ListGroupItem,ListGroup, Spinner} from 'react-bootstrap';
 import adminService from '../services/admin';
+import { useNavigate } from "react-router-dom";
 
 
 import "./HomePage.css";
@@ -8,6 +9,7 @@ import "./HomePage.css";
 export default function HomePage() {
     const [loading, setLoading] = useState(true);
     const [allProducts, setAllProducts] = useState([]);
+    const navigate = useNavigate();
 
     const fetchAllProducts = async () => {
       setLoading(true);
@@ -43,7 +45,9 @@ export default function HomePage() {
             <Row className="justify-content-center mx-auto gy-4 gx-4">
                 {!loading && allProducts.map((product, key)=> (
                  <Card style={{ width: '18rem', margin:10}} key={key}>
-                 <Card.Img variant="top" src={product.img} className="w-100" style={{contain:""}}/>
+                 <Card.Img variant="top" src={product.img} className="w-100" style={{contain:""}} onClick={() => {
+                   navigate('/product', { state: {product} });
+                 }}/>
                  <Card.Body>
                    <Card.Title>{product.title}</Card.Title>
                    <Card.Text>

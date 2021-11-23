@@ -135,7 +135,7 @@ router.post('/addtocart', async function(req, res, next){
     }
 });
 
-router.post('/cart', async function(req, res, next){
+router.get('/cart', async function(req, res, next){
   let token = req.cookies.jwt;
   if (!token){
       return res.status(401).send('Must be logged in.')
