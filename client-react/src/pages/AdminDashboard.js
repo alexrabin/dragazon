@@ -169,7 +169,7 @@ export default function AdminDashboardPage() {
                         {allUsers === "Could not load users" ? <p>{allUsers}</p> : 
                         <div className="text-center" style={{color: 'ivory'}}>
                         <i>Double click a user for actions</i>
-                        <Table striped bordered hover responsive style={{color: 'ivory'}}>
+                        <Table bordered hover responsive style={{color: 'ivory'}}>
                             <thead >
                                 <tr>
                                 <th>UID</th>
@@ -214,7 +214,7 @@ export default function AdminDashboardPage() {
 
                                 setOrderToShow(order._id);
                                 handleShow();
-                            }}>
+                            }} className="bg-dark text-white ">
                             <div className="p-3">
                                 <Row className="justify-content-between">
                                     <div className="col-auto">
@@ -260,8 +260,8 @@ export default function AdminDashboardPage() {
                             return <div key={key}>
 
                                 
-                                    <Accordion.Item eventKey={key}>
-                                    <Accordion.Header>{product.title}</Accordion.Header>
+                                    <Accordion.Item eventKey={key} className="bg-dark text-white ">
+                                    <Accordion.Header className="bg-dark text-white ">{product.title}</Accordion.Header>
                                     <Accordion.Body>
                                     <img src={product.img}  alt={`${product.title}`} style={{width:200, }} className="mb-3 text-center mx-auto"/>
                                     <Form.Group className="mb-3">
