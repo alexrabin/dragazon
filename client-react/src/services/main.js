@@ -5,12 +5,11 @@ const mainService = {
     addToCart : async function(productId, quantity) {
         try {
             const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/users/addtocart`, {
-                products: [
+                product: 
                     {
                         productId,
                         quantity
                     }
-                ]
             }, {
                  headers: {
                  'content-type': 'application/json'

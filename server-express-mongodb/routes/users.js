@@ -118,15 +118,32 @@ router.post('/addtocart', async function(req, res, next){
   if (!token){
       return res.status(401).send('Must be logged in.')
   }
-  let products = req.body.products;
+  let newProduct = req.body.product;
 
-  if (products === undefined){
+  if (newProduct === undefined){
     return res.status(401).send('Products are required.');
   }
   
   let user = await authService.verifyUser(token);
     if (user){
-      let cart = await CartModel.findOneAndUpdate({userId: user.id}, {$push: {products: products}}, {upsert: true, new: true});
+      // CartModel.find({userId: user.id}, (err, cart) => {
+      //     if (err) return res.status(403).send('Could not load cart');
+      //     var item = cart.products.find(p => p.productId == newProduct.productId)
+      //     if (item === null){
+      //         cart.products.push(newProduct);
+      //     }
+      //     else {
+      //       var newProductArray = cart.products.filter(p => p.productId !== newProduct.productId);
+      //       item.quantity += newProduct.quantity;
+      //       newProductArray.push(item)
+      //     }
+      //     cart.save((err, updateCart) => {
+      //       if (err) return res.status(403).send('Could not load cart');
+    
+      //       return res.send(updateCart)
+      //   });
+      // });
+      let cart = await CartModel.findOneAndUpdate({userId: user.id, "products.productId" : newProduct.productId}, {$inc: {"products.$.quantity": newProduct.quantity}}, {upsert: true, new: true});
       return res.send(cart)
     }
     else {
@@ -157,15 +174,16 @@ router.post('/removefromcart', async function(req, res, next){
   if (!token){
       return res.status(401).send('Must be logged in.')
   }
-  let products = req.body.products;
+  let removeProduct = req.body.product;
 
-  if (products === undefined){
+  if (removeProduct === undefined){
     return res.status(401).send('Products are required.');
   }
   
   let user = await authService.verifyUser(token);
     if (user){
-      let cart = await CartModel.findOneAndUpdate({userId: user.id}, {$pullAll: {products: products  }}, {upsert: true, new: true});
+      // let cart = await CartModel.findOneAndUpdate({userId: user.id}, {$pullAll: {products: products  }}, {upsert: true, new: true});
+      let cart = await CartModel.findOneAndUpdate({userId: user.id, "products.productId" : removeProduct.productId}, {$dec: {"products.$.quantity": removeProduct.quantity}}, {upsert: true, new: true});
       return res.send(cart)
     }
     else {
