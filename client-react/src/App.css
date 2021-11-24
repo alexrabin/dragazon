@@ -28,3 +28,10 @@ body{
 .nav-pills .nav-link{
     color:rgb(170,1,20) !important
 }
+
+.navbar-toggler:focus,
+.navbar-toggler:active,
+.navbar-toggler {
+    border: 0px;
+    border-radius: 0;
+}

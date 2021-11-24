@@ -2,8 +2,10 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Container,Form} from 'react-bootstrap';
 import authService from '../services/auth';
 import { useNavigate } from 'react-router-dom';
+
 export default function ProfilePage() {
     const [profile, setProfile] = useState(null)
+
     const navigate = useNavigate();
 
     const fetchProfile = useCallback(async () => {
@@ -16,9 +18,10 @@ export default function ProfilePage() {
       }, [navigate])
 
     useEffect(() => {
-    
+
         fetchProfile();
-    }, [fetchProfile])
+    }, [fetchProfile]);
+    
     return (
         <Container className="mt-5 mb-5" style={{color: 'ivory'}}>
             <h1 className="mb-4 text-center" style={{color: 'rgb(170,1,20)'}}>Profile</h1>

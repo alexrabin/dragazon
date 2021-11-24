@@ -63,7 +63,7 @@ export default function LoginPage() {
     setErrorMsg(null);
   };
   return (
-    <Container className="col-md-10 mx-auto col-lg-10 col-xl-6" style={{color: 'ivory'}}>
+    <Container className="col-md-10 mx-auto col-lg-10 col-xl-6 mt-3" style={{color: 'ivory'}}>
       <Form
         className="col-md-6 mb-5 mx-auto"
         onSubmit={(e) => {

@@ -169,7 +169,7 @@ export default function AdminDashboardPage() {
                         {allUsers === "Could not load users" ? <p>{allUsers}</p> : 
                         <div className="text-center" style={{color: 'ivory'}}>
                         <i>Double click a user for actions</i>
-                        <Table bordered hover responsive style={{color: 'ivory'}}>
+                        <Table bordered hover responsive variant="dark">
                             <thead >
                                 <tr>
                                 <th>UID</th>
@@ -257,7 +257,7 @@ export default function AdminDashboardPage() {
                         {allProducts === "Could not load products" ? <p>{allProducts}</p> : 
                         <Accordion>
                         {allProducts.map((product, key) => {
-                            return <div key={key}>
+                            return <div key={key} className="mb-3">
 
                                 
                                     <Accordion.Item eventKey={key} className="bg-dark text-white ">
@@ -279,7 +279,7 @@ export default function AdminDashboardPage() {
                                     <Form.Group className="mb-1">
                                     <Form.Label>Categories:</Form.Label>
                                     <Row className="justify-content-start" style={{marginLeft:1, marginRight:1}}>
-                                    {product.categories && product.categories.map((category, cKey) => <Badge key={cKey}className="col-auto m-1" bg="dark" >{category}</Badge>)}
+                                    {product.categories && product.categories.map((category, cKey) => <Badge key={cKey}className="col-auto m-1" bg="primary" >{category}</Badge>)}
 
                                     </Row>                                    
                                     </Form.Group>
