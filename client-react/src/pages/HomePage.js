@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Container, Row, Card, ListGroupItem,ListGroup, Spinner, Carousel} from 'react-bootstrap';
+import {Container, Row, Card, Spinner, Carousel} from 'react-bootstrap';
 import adminService from '../services/admin';
 import { useNavigate } from "react-router-dom";
 
@@ -37,7 +37,7 @@ export default function HomePage() {
 
     return (
         <Container className="text-center mb-5">
-            <h1 className="mb-4" style={{color: "rgb(170,1,20)"}}>Welcome to Dragazon</h1>
+            <h1 className="mt-3 mb-4" style={{color: "rgb(170,1,20)"}}>Welcome to Dragazon</h1>
             <h2 className="mb-4" style={{color: 'ivory'}}>Home of All your Dragon Needs!</h2>
             {loading && <div className="text-center mx-auto w-100">
                         <Spinner animation="border"/>
@@ -54,7 +54,7 @@ export default function HomePage() {
                         alt={product.title}
                         style={{height: 400, objectFit:'cover'}}
                       />
-                      <Carousel.Caption>
+                      <Carousel.Caption style={{backgroundColor:"rgba(0,0,0,0.5)", borderRadius:10 }}>
                         <h3>{product.title}</h3>
                         <p>{product.desc}</p>
                       </Carousel.Caption>
@@ -65,17 +65,16 @@ export default function HomePage() {
                 {!loading && allProducts.slice(3).map((product, key)=> (
                  <Card style={{ width: '18rem', margin:10}} key={key} onClick={() => {
                   navigate('/product', { state: {product} });
-                }}>
+                }} className="bg-dark">
                  <Card.Img variant="top" src={product.img} className="w-100" style={{contain:""}}/>
-                 <Card.Body>
+                 <Card.Body className="text-white">
                    <Card.Title>{product.title}</Card.Title>
                    <Card.Text>
                      {product.desc}
                    </Card.Text>
+                   <Card.Text>{getReadablePrice(product.price)}</Card.Text>
                  </Card.Body>
-                 <ListGroup className="list-group-flush">
-                   <ListGroupItem>{getReadablePrice(product.price)}</ListGroupItem>
-                 </ListGroup>
+                 
                  <Card.Body>
                    <Card.Link href="#">Add to Cart</Card.Link>
                    <Card.Link href="#">Buy</Card.Link>

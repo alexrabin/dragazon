@@ -1,6 +1,12 @@
 
-#offcanvasNavbar{
+/* #offcanvasNavbar{
     background-color: silver;
     
-}
+} */
 
+.link{
+    color:white
+}
+.link:hover{
+    color:rgb(170,1,20)
+}
