@@ -155,29 +155,32 @@ export default function LoginPage() {
           {showLogin ? (
             <p>
               Don't have an account?{" "}
-              <a href
-                style={{ color: "blue", cursor: "pointer" }}
+              <button
+               className="text-danger"
+               type="button"
+
                 onClick={() => {
                   reset();
                   setShowLogin(!showLogin);
                 }}
               >
                 Sign up here
-              </a>
+              </button>
               .
             </p>
           ) : (
             <p>
               Already have an account?{" "}
-              <a href
-                style={{ color: "blue", cursor: "pointer" }}
+              <button
+                className="text-danger"
+                type="button"
                 onClick={() => {
                   reset();
                   setShowLogin(!showLogin);
                 }}
               >
                 Login here
-              </a>
+              </button>
               .
             </p>
           )}
