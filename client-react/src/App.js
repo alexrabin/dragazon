@@ -20,6 +20,7 @@ function App() {
 
   const logOut = async () => {
     await authService.logout();
+    setCart({});
     fetchProfile();
   }
 

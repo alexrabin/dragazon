@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Container,Form} from 'react-bootstrap';
 import authService from '../services/auth';
 import { useNavigate } from 'react-router-dom';
@@ -6,12 +6,25 @@ import { Navigate } from 'react-router';
 import AppContext from '../components/AppContext';
 
 export default function ProfilePage() {
-    // const [profile, setProfile] = useState(null)
+    const [profile, setProfile] = useState(null)
 
-    // const {profile } = useContext(AppContext);
+    const navigate = useNavigate();
+
+    const fetchProfile = useCallback(async () => {
+        let user = await authService.getLoggedInUser();
+            if (user.error){
+                navigate('/login');
+                return
+            }
+            setProfile(user.response.data);
+      }, [navigate])
+
+    useEffect(() => {
+
+        fetchProfile();
+    }, [fetchProfile]);
+    
     return (
-        <AppContext.Consumer>
-            {({profile, cart, logOut}) => (
         <Container className="mt-5 mb-5" style={{color: 'ivory'}}>
             <h1 className="mb-4 text-center" style={{color: 'rgb(170,1,20)'}}>Profile</h1>
             {profile && <><Form.Group className="mb-3">
@@ -36,7 +49,5 @@ export default function ProfilePage() {
             
             
         </Container>
-            )}
-        </AppContext.Consumer>
     )
 }
