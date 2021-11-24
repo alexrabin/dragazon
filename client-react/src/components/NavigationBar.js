@@ -4,10 +4,11 @@ import {
   Container,
   Nav,
   Offcanvas,
+  CloseButton
 } from "react-bootstrap";
 import authService from "../services/auth";
 import { useNavigate } from "react-router-dom";
-import logo from "../assets/dragazonlogo.png";
+import logo from "../assets/dragazonlogoLight.png";
 
 import './NavigationBar.css';
 
@@ -33,7 +34,7 @@ export default function NavigationBar() {
 
   return (
     <div>
-      <Navbar bg = 'ivory' expand={false}>
+      <Navbar bg="dark" variant="dark" expand={false}>
         <Container fluid>
          
           <Navbar.Brand>
@@ -42,6 +43,7 @@ export default function NavigationBar() {
             </a>
           </Navbar.Brand>
           <Navbar.Toggle
+            className="text-white"
             aria-controls="offcanvasNavbar"
             onClick={() => setShow(true)}
           />
@@ -51,14 +53,17 @@ export default function NavigationBar() {
             id="offcanvasNavbar"
             aria-labelledby="offcanvasNavbarLabel"
             placement="end"
+            className="bg-dark"
+            bg="dark" variant="dark"
           >
-            <Offcanvas.Header closeButton>
-             
+            <Offcanvas.Header >
               <Offcanvas.Title id="offcanvasNavbarLabel">
                 <a href="/">
                   <img src={logo} alt="Dragazon Logo" style={{ width: 140, marginTop: 0 }}></img>
                 </a>
               </Offcanvas.Title>
+              <CloseButton variant="white" onClick={() => setShow(false)}/>
+
             </Offcanvas.Header>
             <Offcanvas.Body>
               <Nav className="justify-content-end flex-grow-1 pe-3">
