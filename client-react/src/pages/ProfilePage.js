@@ -2,8 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Container,Form} from 'react-bootstrap';
 import authService from '../services/auth';
 import { useNavigate } from 'react-router-dom';
-import { Navigate } from 'react-router';
-import AppContext from '../components/AppContext';
 
 export default function ProfilePage() {
     const [profile, setProfile] = useState(null)

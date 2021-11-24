@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState} from "react";
 import {
   Navbar,
   Container,
@@ -7,32 +7,17 @@ import {
   CloseButton,
   Badge
 } from "react-bootstrap";
-import authService from "../services/auth";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/dragazonlogoLight.png";
 import { FaShoppingCart, FaBars } from 'react-icons/fa';
-import { useContext } from 'react';
 import AppContext from './AppContext';
 import './NavigationBar.css';
 
 
 
 export default function NavigationBar() {
-  // const [profile, setProfile] = useState(null);
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
-  // const fetchProfile = useCallback(async () => {
-  //   let user = await authService.getLoggedInUser();
-  //   if (user.response) {
-  //     setProfile(user.response.data);
-  //   } else if (user.error) {
-  //     setProfile(null);
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   fetchProfile();
-  // }, [fetchProfile]);
   const getTotalAmountOfProducts = (cart) => {
     if (cart.products === undefined){
       return 0;
@@ -59,8 +44,8 @@ export default function NavigationBar() {
 >
     <div className="row jusitfy-content-between align-items-center ">
       <FaShoppingCart className="col-auto"/>
-      <Badge pill bg="danger" className="col-auto" style={{fontSize:11}} style={{}}>
-        { getTotalAmountOfProducts(cart)}
+      <Badge pill bg="danger" className="col-auto" style={{fontSize:11}}>
+        {getTotalAmountOfProducts(cart)}
       </Badge>
     </div>
   </Navbar.Toggle>
