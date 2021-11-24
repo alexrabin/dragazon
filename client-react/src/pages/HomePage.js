@@ -54,7 +54,7 @@ export default function HomePage() {
                         alt={product.title}
                         style={{height: 400, objectFit:'cover'}}
                       />
-                      <Carousel.Caption>
+                      <Carousel.Caption style={{backgroundColor:"rgba(0,0,0,0.5)", borderRadius:10 }}>
                         <h3>{product.title}</h3>
                         <p>{product.desc}</p>
                       </Carousel.Caption>
