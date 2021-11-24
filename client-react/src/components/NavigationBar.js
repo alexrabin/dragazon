@@ -62,17 +62,18 @@ export default function NavigationBar() {
             </Offcanvas.Header>
             <Offcanvas.Body>
               <Nav className="justify-content-end flex-grow-1 pe-3">
-                <Nav.Link href="/">Home</Nav.Link>
+                <Nav.Link href="/" className="link">Home</Nav.Link>
                 {profile !== null && (
-                  <Nav.Link href="/profile">Profile</Nav.Link>
+                  <Nav.Link href="/profile" className="link">Profile</Nav.Link>
                 )}
                 {profile !== null && profile.isAdmin && (
-                  <Nav.Link href="/admindashboard">Admin Dashboard</Nav.Link>
+                  <Nav.Link href="/admindashboard" className="link">Admin Dashboard</Nav.Link>
                 )}
                 {profile === null ? (
-                  <Nav.Link href="/login">Login</Nav.Link>
+                  <Nav.Link href="/login" className="link">Login</Nav.Link>
                 ) : (
                   <Nav.Link
+                  className="link"
                     onClick={async () => {
                       setShow(false);
                       await authService.logout();

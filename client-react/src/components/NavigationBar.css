@@ -4,3 +4,9 @@
     
 }
 
+.link{
+    color:rgb(170,1,20)
+}
+.link:hover{
+    color:black
+}
