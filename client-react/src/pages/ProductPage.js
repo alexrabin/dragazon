@@ -1,14 +1,18 @@
-import React, { } from 'react'
-import {Container, Row, Button} from 'react-bootstrap'
+import React, { useState, useContext} from 'react'
+import {Container, Row, Button, Badge} from 'react-bootstrap'
 import { useLocation } from 'react-router-dom';
 import mainService from '../services/main';
+import { FaMinus, FaPlus } from 'react-icons/fa';
+import AppContext from '../components/AppContext';
 export default function ProductPage() {
     const {state} = useLocation();
+    const appContext = useContext(AppContext)
     const getReadablePrice = (price) => {
         var dollars = price / 100;
         dollars = dollars.toLocaleString("en-US", {style:"currency", currency:"USD"});
         return dollars;
     }
+    const [quanity, setQuanity] = useState(1)
     return (
         <Container className="mt-3">
             <div>
@@ -22,7 +26,28 @@ export default function ProductPage() {
                         <strong>Price:</strong> {getReadablePrice(state.product.price)}
                     </div>
                     <hr/>
+                    {state.product.categories && state.product.categories.map((category, cKey) => <Badge key={cKey}className="col-auto m-1" bg="danger" >{category}</Badge>)}
+<hr/>
                     <div className="text-center">
+
+                    <div className='quanity-group mb-3'>
+                        <Button
+                        variant="secondary"
+                            className='quan-buttons m-2' 
+                            disabled={quanity<=1}
+                         onClick={() => setQuanity(prev => prev-1)}> 
+                            <FaMinus/> 
+                        </Button>
+                        {quanity}
+                        <Button
+                            disabled={quanity>=9}
+                            className='quan-buttons m-2'
+                            onClick={() => setQuanity(prev => prev+1)}> 
+
+                            <FaPlus/> 
+                        </Button>
+                    </div>
+
                     <Button
                         variant="danger"
                         style={{
@@ -34,13 +59,15 @@ export default function ProductPage() {
                         }}
 
                         onClick={async () => {
-                            await mainService.addToCart(state.product._id, 1);
-                            let response = await mainService.getCart();
-                            console.log(response);
+                            await mainService.addToCart(state.product._id, quanity);
+                            let cart = await mainService.getCart();
+                            appContext.setCart(cart.response.data);
+                            setQuanity(1);
                         }}
                     >
                         Add To Cart
                     </Button>
+                    
                     </div>
                 </div>
                 <div className="col-md-8 col-lg-6 text-center">

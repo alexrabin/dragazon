@@ -119,32 +119,38 @@ router.post('/addtocart', async function(req, res, next){
       return res.status(401).send('Must be logged in.')
   }
   let newProduct = req.body.product;
-
+  console.log("new product:", JSON.stringify(newProduct))
   if (newProduct === undefined){
     return res.status(401).send('Products are required.');
   }
   
   let user = await authService.verifyUser(token);
     if (user){
-      // CartModel.find({userId: user.id}, (err, cart) => {
-      //     if (err) return res.status(403).send('Could not load cart');
-      //     var item = cart.products.find(p => p.productId == newProduct.productId)
-      //     if (item === null){
-      //         cart.products.push(newProduct);
-      //     }
-      //     else {
-      //       var newProductArray = cart.products.filter(p => p.productId !== newProduct.productId);
-      //       item.quantity += newProduct.quantity;
-      //       newProductArray.push(item)
-      //     }
-      //     cart.save((err, updateCart) => {
-      //       if (err) return res.status(403).send('Could not load cart');
+      CartModel.findOne({userId: user.id}, async (err, cart) => {
+          if (err){
+            let cart = await CartModel.findOneAndUpdate({userId: user.id}, {$push: {products: newProduct}}, {upsert: true, new: true});
+            return res.send(cart)
+            
+          }
+          console.log(JSON.stringify(cart));
+          var item = cart.products.find(p => p.productId === newProduct.productId);
+          console.log("found item",JSON.stringify(item));
+
+          if (item === undefined){
+              cart.products.push(newProduct);
+          }
+          else {
+            var newProductArray = cart.products.filter(p => p.productId !== newProduct.productId);
+            item.quantity += newProduct.quantity;
+            newProductArray.push(item)
+            cart.products = newProductArray;
+          }
+          cart.save((err, updateCart) => {
+            if (err) return res.status(403).send('Could not load cart');
     
-      //       return res.send(updateCart)
-      //   });
-      // });
-      let cart = await CartModel.findOneAndUpdate({userId: user.id, "products.productId" : newProduct.productId}, {$inc: {"products.$.quantity": newProduct.quantity}}, {upsert: true, new: true});
-      return res.send(cart)
+            return res.send(updateCart)
+        });
+      });
     }
     else {
       res.status(401);
@@ -160,7 +166,7 @@ router.get('/cart', async function(req, res, next){
   
   let user = await authService.verifyUser(token);
     if (user){
-      let cart = await CartModel.find({userId: user.id});
+      let cart = await CartModel.findOne({userId: user.id});
       return res.send(cart)
     }
     else {
