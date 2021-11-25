@@ -40,7 +40,7 @@ export default function NavigationBar() {
     </a>
   </Navbar.Brand>
   <div className="row jusitfy-content-between align-items-center" style={{marginRight:10}}>
-  <Navbar.Toggle aria-controls="cartOffCanvas" style={{marginRight:10}} className="text-white col-auto"
+  {profile !== null && <Navbar.Toggle aria-controls="cartOffCanvas" style={{marginRight:10}} className="text-white col-auto"
 >
     <div className="row jusitfy-content-between align-items-center ">
       <FaShoppingCart className="col-auto"/>
@@ -48,7 +48,7 @@ export default function NavigationBar() {
         {getTotalAmountOfProducts(cart)}
       </Badge>
     </div>
-  </Navbar.Toggle>
+  </Navbar.Toggle>}
     <Navbar.Toggle
       className="text-white col-auto"
       aria-controls="offcanvasNavbar"
