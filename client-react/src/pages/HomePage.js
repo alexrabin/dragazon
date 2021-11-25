@@ -1,90 +1,115 @@
-import React, { useState, useEffect } from 'react';
-import {Container, Row, Card, Spinner, Carousel} from 'react-bootstrap';
-import adminService from '../services/admin';
+import React, { useState, useEffect } from "react";
+import { Container, Row, Card, Spinner, Carousel } from "react-bootstrap";
+import adminService from "../services/admin";
 import { useNavigate } from "react-router-dom";
-
+import head from "../assets/dragonheader.png";
 
 import "./HomePage.css";
 
 export default function HomePage() {
-    const [loading, setLoading] = useState(true);
-    const [allProducts, setAllProducts] = useState([]);
-    const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [allProducts, setAllProducts] = useState([]);
+  const navigate = useNavigate();
 
-    const fetchAllProducts = async () => {
-      setLoading(true);
+  const fetchAllProducts = async () => {
+    setLoading(true);
 
-      let allProducts = await adminService.getAllProducts();
-          if (allProducts.error){
-              setAllProducts("Could not load products");
-          }
-          else{
-              setLoading(false);
-              setAllProducts(allProducts.response.data);
-          }
+    let allProducts = await adminService.getAllProducts();
+    if (allProducts.error) {
+      setAllProducts("Could not load products");
+    } else {
+      setLoading(false);
+      setAllProducts(allProducts.response.data);
     }
+  };
 
-      useEffect(() => {
-      
-        fetchAllProducts();
-    }, [])
+  useEffect(() => {
+    fetchAllProducts();
+  }, []);
 
-    const getReadablePrice = (price) => {
-      var dollars = price / 100;
-      dollars = dollars.toLocaleString("en-US", {style:"currency", currency:"USD"});
-      return dollars;
-  }
+  const getReadablePrice = (price) => {
+    var dollars = price / 100;
+    dollars = dollars.toLocaleString("en-US", {
+      style: "currency",
+      currency: "USD",
+    });
+    return dollars;
+  };
 
-    return (
-        <Container className="text-center mb-5">
-            <h1 className="mt-3 mb-4" style={{color: "rgb(170,1,20)"}}>Welcome to Dragazon</h1>
-            <h2 className="mb-4" style={{color: 'ivory'}}>Home of All your Dragon Needs!</h2>
-            {loading && <div className="text-center mx-auto w-100">
-                        <Spinner animation="border"/>
-                        </div>}
-            {!loading && <Carousel fade className="mb-5">
-              
-                {allProducts.slice(0,3).map((product, key)=> (
-                  <Carousel.Item key={key} onClick={() => {
-                    navigate('/product', { state: {product} });
-                  }}>
-                      <img
-                        className="d-block w-100"
-                        src={product.img}
-                        alt={product.title}
-                        style={{height: 400, objectFit:'cover'}}
-                      />
-                      <Carousel.Caption style={{backgroundColor:"rgba(0,0,0,0.5)", borderRadius:10 }}>
-                        <h3>{product.title}</h3>
-                        <p>{product.desc}</p>
-                      </Carousel.Caption>
-                  </Carousel.Item>
-                ))}
-              </Carousel>}
-            <Row className="justify-content-center mx-auto gy-4 gx-4">
-                {!loading && allProducts.slice(3).map((product, key)=> (
-                 <Card style={{ width: '18rem', margin:10}} key={key} onClick={() => {
-                  navigate('/product', { state: {product} });
-                }} className="bg-dark">
-                 <Card.Img variant="top" src={product.img} className="w-100" style={{contain:""}}/>
-                 <Card.Body className="text-white">
-                   <Card.Title>{product.title}</Card.Title>
-                   <Card.Text>
-                     {product.desc}
-                   </Card.Text>
-                   <Card.Text>{getReadablePrice(product.price)}</Card.Text>
-                 </Card.Body>
-                 
-                 <Card.Body>
-                   <Card.Link href="#">Add to Cart</Card.Link>
-                   <Card.Link href="#">Buy</Card.Link>
-                 </Card.Body>
-               </Card>   
-                       
+  return (
+    <Container className="text-center mb-5">
+      <h1 className="mt-3 mb-4" style={{ color: "rgb(170,1,20)", fontFamily: "cursive" }}>
+        Welcome to Dragazon
+      </h1>
+      <h2 className="mb-4" style={{ color: "ivory", fontFamily: "cursive" }}>
+        Home of All your Dragon Needs!
+      </h2>
+      <img
+        className="d-block w-100"
+        src={head}
+        style={{ height: 150, objectFit: "fit" }}
+      />
 
+      {loading && (
+        <div className="text-center mx-auto w-100">
+          <Spinner animation="border" />
+        </div>
+      )}
+      {!loading && (
+        <Carousel fade className="mb-5">
+          {allProducts.slice(0, 3).map((product, key) => (
+            <Carousel.Item
+              key={key}
+              onClick={() => {
+                navigate("/product", { state: { product } });
+              }}
+            >
+              <img
+                className="d-block w-100"
+                src={product.img}
+                alt={product.title}
+                style={{ height: 400, objectFit: "cover" }}
+              />
+              <Carousel.Caption
+                style={{ backgroundColor: "rgba(0,0,0,0.5)", borderRadius: 10 }}
+              >
+                <h3>{product.title}</h3>
+                <p>{product.desc}</p>
+              </Carousel.Caption>
+            </Carousel.Item>
+          ))}
+        </Carousel>
+      )}
+      <Row className="justify-content-center mx-auto gy-4 gx-4">
+        {!loading &&
+          allProducts.slice(3).map((product, key) => (
+            <Card
+              style={{ width: "18rem", margin: 10 }}
+              key={key}
+              onClick={() => {
+                navigate("/product", { state: { product } });
+              }}
+              className="bg-dark"
+            >
+              <Card.Img
+                variant="top"
+                src={product.img}
+                className="w-100"
+                style={{ contain: "" }}
+              />
+              <Card.Body className="text-white">
+                <Card.Title>{product.title}</Card.Title>
+                <Card.Text>{product.desc}</Card.Text>
+                <Card.Text>{getReadablePrice(product.price)}</Card.Text>
+              </Card.Body>
 
-                ))}
-            </Row>
-        </Container>
-    )
+              <Card.Body>
+                <Card.Link href="#">Add to Cart</Card.Link>
+                <Card.Link href="#">Buy</Card.Link>
+              </Card.Body>
+            </Card>
+          ))}
+      </Row>
+    </Container>
+  );
 }

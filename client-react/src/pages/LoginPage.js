@@ -70,7 +70,7 @@ export default function LoginPage() {
           submitHandler(e);
         }}
       >
-        <h1 className="text-center" style={{color: 'rgb(170,1,20)'}}>{showLogin ? "Login" : "Sign Up"}</h1>
+        <h1 className="text-center" style={{color: 'rgb(170,1,20)', fontFamily: 'cursive'}}>{showLogin ? "Login" : "Sign Up"}</h1>
 
         {!showLogin && (
           <Form.Group className="mb-3" controlId="name">
