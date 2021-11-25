@@ -41,7 +41,7 @@ export default function HomePage() {
       <img
         className="d-block w-100"
         src={head}
-        style={{ height: 150, objectFit: "fit" }}
+        style={{ objectFit: "contain" }}
       />
 
       {loading && (

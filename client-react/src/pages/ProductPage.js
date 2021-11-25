@@ -34,13 +34,13 @@ export default function ProductPage() {
                         <Button
                         variant="secondary"
                             className='quan-buttons m-2' 
-                            disabled={quanity<=1}
+                            disabled={quanity<=1 || appContext.profile===null}
                          onClick={() => setQuanity(prev => prev-1)}> 
                             <FaMinus/> 
                         </Button>
                         {quanity}
                         <Button
-                            disabled={quanity>=9}
+                            disabled={quanity>=9 || appContext.profile===null}
                             className='quan-buttons m-2'
                             onClick={() => setQuanity(prev => prev+1)}> 
 
@@ -57,7 +57,7 @@ export default function ProductPage() {
                         color:"ivory",
                         fontWeight:"700",
                         }}
-
+                        disabled={appContext.profile===null}
                         onClick={async () => {
                             await mainService.addToCart(state.product._id, quanity);
                             let cart = await mainService.getCart();
