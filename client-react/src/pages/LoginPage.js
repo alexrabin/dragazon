@@ -9,6 +9,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import authService from "../services/auth";
 import "./LoginPage.css";
+import head from "../assets/textheaderligred.png";
 
 export default function LoginPage() {
   const [showLogin, setShowLogin] = useState(true);
@@ -63,13 +64,20 @@ export default function LoginPage() {
     setErrorMsg(null);
   };
   return (
+   
     <Container className="col-md-10 mx-auto col-lg-10 col-xl-6 mt-3" style={{color: 'ivory'}}>
+ <img
+      className="d-block w-100"
+      src={head}
+      style={{ height: 150, objectFit: "fit" }}
+    />
       <Form
         className="col-md-6 mb-5 mx-auto"
         onSubmit={(e) => {
           submitHandler(e);
         }}
-      >
+      >  
+      
         <h1 className="text-center" style={{color: 'rgb(170,1,20)', fontFamily: 'cursive'}}>{showLogin ? "Login" : "Sign Up"}</h1>
 
         {!showLogin && (

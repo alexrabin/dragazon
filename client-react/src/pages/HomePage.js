@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Card, Spinner, Carousel } from "react-bootstrap";
 import adminService from "../services/admin";
 import { useNavigate } from "react-router-dom";
-import head from "../assets/textheaderlig.png";
+import head from "../assets/textheaderligred.png";
 
 import "./HomePage.css";
 
