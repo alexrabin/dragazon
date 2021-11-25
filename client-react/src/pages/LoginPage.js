@@ -65,14 +65,14 @@ export default function LoginPage() {
   };
   return (
    
-    <Container className="col-md-10 mx-auto col-lg-10 col-xl-6 mt-3" style={{color: 'ivory'}}>
+    <Container className="col-md-10 mx-auto col-lg-10 col-xl-6" style={{color: 'ivory'}}>
  <img
-      className="d-block w-100"
-      src={head}
-      style={{ height: 150, objectFit: "fit" }}
-    />
+        className="d-block w-100"
+        src={head}
+        style={{ objectFit: "contain" }}
+      />
       <Form
-        className="col-md-6 mb-5 mx-auto"
+        className="col-md-6 mb-5 mx-auto mt-3"
         onSubmit={(e) => {
           submitHandler(e);
         }}
