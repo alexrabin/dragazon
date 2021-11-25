@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Card, Spinner, Carousel } from "react-bootstrap";
 import adminService from "../services/admin";
 import { useNavigate } from "react-router-dom";
-import head from "../assets/dragonheader.png";
+import head from "../assets/textheader.png";
 
 import "./HomePage.css";
 
@@ -38,12 +38,12 @@ export default function HomePage() {
 
   return (
     <Container className="text-center mb-5">
-      <h1 className="mt-3 mb-4" style={{ color: "rgb(170,1,20)", fontFamily: "cursive" }}>
-        Welcome to Dragazon
-      </h1>
-      <h2 className="mb-4" style={{ color: "ivory", fontFamily: "cursive" }}>
-        Home of All your Dragon Needs!
-      </h2>
+      {/* <h1 className="mt-3 mb-4" style={{ color: "rgb(170,1,20)", fontFamily: "cursive" }}> */}
+        {/* Welcome to Dragazon */}
+      {/* </h1> */}
+      {/* <h2 className="mb-4" style={{ color: "ivory", fontFamily: "cursive" }}> */}
+        {/* Home of All your Dragon Needs! */}
+      {/* </h2> */}
       <img
         className="d-block w-100"
         src={head}
