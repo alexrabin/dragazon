@@ -41,6 +41,20 @@ const mainService = {
         }
 
     },
+    getProduct: async function(productId){
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/products/${productId}`, {
+                 headers: {
+                 'content-type': 'application/json'
+                },
+                withCredentials: true,
+                credentials: 'same-origin',
+            } )
+            return {response: response};
+        } catch (err) {
+            return {error:err.response ? err.response.data: "network error"};
+        }
+    },
     createOrder: async function(){
         
     },

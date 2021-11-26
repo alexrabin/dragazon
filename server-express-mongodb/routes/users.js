@@ -166,8 +166,18 @@ router.get('/cart', async function(req, res, next){
   
   let user = await authService.verifyUser(token);
     if (user){
-      let cart = await CartModel.findOne({userId: user.id});
-      return res.send(cart)
+      var totalPrice =0;
+      let cart = (await CartModel.findOne({userId: user.id}).exec()).toObject();
+      const productIds = cart.products.map(product => product.productId);
+      let products = await ProductsModel.find().where('_id').in(productIds).exec();
+      var productItems = cart.products.map(p => {
+      let product = products.find(elem => elem._id == p.productId);
+      totalPrice += p.quantity * product.price;
+      return {...p, product};
+      });
+      cart.products = productItems;
+      cart.totalPrice = totalPrice;
+      return res.json(cart)            
     }
     else {
       res.status(401);
