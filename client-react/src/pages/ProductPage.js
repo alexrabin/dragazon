@@ -1,11 +1,12 @@
 import React, { useState, useContext} from 'react'
 import {Container, Row, Button, Badge} from 'react-bootstrap'
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import mainService from '../services/main';
-import { FaMinus, FaPlus } from 'react-icons/fa';
+import { FaMinus, FaPlus, FaArrowLeft } from 'react-icons/fa';
 import AppContext from '../components/AppContext';
 export default function ProductPage() {
     const {state} = useLocation();
+    const navigate = useNavigate();
     const appContext = useContext(AppContext)
     const getReadablePrice = (price) => {
         var dollars = price / 100;
@@ -15,6 +16,11 @@ export default function ProductPage() {
     const [quanity, setQuanity] = useState(1)
     return (
         <Container className="mt-3">
+            <div className="mb-5 text-white">
+                <FaArrowLeft onClick={()=> {
+                    navigate("/");
+                }}/>
+            </div>
             <div>
                 <Row className="justify-content-center ">
                 <div className="col-md-4 col-lg-6 mb-3" style={{color:'ivory'}}>
