@@ -22,8 +22,25 @@ const mainService = {
             return {error:err.response ? err.response.data: "network error"};
         }
     },
-    removeFromCart : async function(productId){
-
+    removeFromCart : async function(productId, quantity){
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/users/removefromcart`, {
+                product: 
+                    {
+                        productId,
+                        quantity
+                    }
+            }, {
+                 headers: {
+                 'content-type': 'application/json'
+                },
+                withCredentials: true,
+                credentials: 'same-origin',
+            } )
+            return {response: response};
+        } catch (err) {
+            return {error:err.response ? err.response.data: "network error"};
+        }
     },
     getCart: async function(){
         

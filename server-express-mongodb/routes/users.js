@@ -132,9 +132,7 @@ router.post('/addtocart', async function(req, res, next){
             return res.send(cart)
             
           }
-          console.log(JSON.stringify(cart));
           var item = cart.products.find(p => p.productId === newProduct.productId);
-          console.log("found item",JSON.stringify(item));
 
           if (item === undefined){
               cart.products.push(newProduct);
@@ -199,8 +197,27 @@ router.post('/removefromcart', async function(req, res, next){
   let user = await authService.verifyUser(token);
     if (user){
       // let cart = await CartModel.findOneAndUpdate({userId: user.id}, {$pullAll: {products: products  }}, {upsert: true, new: true});
-      let cart = await CartModel.findOneAndUpdate({userId: user.id, "products.productId" : removeProduct.productId}, {$dec: {"products.$.quantity": removeProduct.quantity}}, {upsert: true, new: true});
-      return res.send(cart)
+
+      CartModel.findOne({userId: user.id}, async (err, cart) => {
+        var item = cart.products.find(p => p.productId === removeProduct.productId);
+
+        if (item === undefined){
+            return res.status(403).send("Error removing item from cart");
+        }
+        else {
+          var newProductArray = cart.products.filter(p => p.productId !== removeProduct.productId);
+          item.quantity -= removeProduct.quantity;
+          if (item.quantity > 0){
+            newProductArray.push(item)
+          }
+          cart.products = newProductArray;
+        }
+        cart.save((err, updateCart) => {
+          if (err) return res.status(403).send('Could not load cart');
+  
+          return res.send(updateCart)
+      });
+    });
     }
     else {
       res.status(401);

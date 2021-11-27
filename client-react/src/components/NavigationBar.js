@@ -13,6 +13,7 @@ import logo from "../assets/dragazonlogoLight.png";
 import { FaShoppingCart, FaBars } from 'react-icons/fa';
 import AppContext from './AppContext';
 import './NavigationBar.css';
+import CartProduct from "./CartProduct";
 
 
 
@@ -22,7 +23,7 @@ export default function NavigationBar() {
 
   const navigate = useNavigate();
   const getTotalAmountOfProducts = (cart) => {
-    if (cart.products === undefined){
+    if (cart.products === undefined || cart.products.length < 1){
       return 0;
     }
     const total = cart.products.map(prod => {
@@ -129,28 +130,22 @@ const getReadablePrice = (price) => {
 
     </Offcanvas.Header>
     <Offcanvas.Body>
+      {cart.products === undefined || cart.products.length < 1 && <div className="text-center text-white">
+        <h1>Your cart is empty.</h1>
+        <br/>
+        <h4>Add items and they will show up here.</h4>
+        <br/>
+      </div>
+      }
       {cart.products && cart.products.map((p, key) => {
         return <div key={key}>
-              <div className="text-white">
-              <div className="mb-3">
-                  <img alt={`${p.product.title}`} src={p.product.img} style={{width:200, }} className=""/>
-                  </div>
-                  <div className="">
-                  <p>
-                      {p.product.title} {p.quantity > 1 && `× ${p.quantity}`}
-                  </p>
-                  <p>
-                      {getReadablePrice(p.quantity * p.product.price)}
-                  </p>
-                  </div>
-                  
-              </div>
-              <hr className="solid text-white"/>
-
+              <CartProduct p={p}/>
           </div>
       })}
-      <h3 className="text-white">Total: {getReadablePrice(cart.totalPrice)}</h3>
-      <Button
+      
+     {cart.products && cart.products.length >0 && <div className="text-center">
+     <h3 className="text-white">Total: {getReadablePrice(cart.totalPrice)}</h3>
+     <Button
             variant="danger"
             type="button"
             style={{
@@ -164,6 +159,7 @@ const getReadablePrice = (price) => {
           >
             Checkout
           </Button>
+     </div>}
     </Offcanvas.Body>
   </Navbar.Offcanvas>
 </Container>
