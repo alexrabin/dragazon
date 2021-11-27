@@ -5,7 +5,8 @@ import {
   Nav,
   Offcanvas,
   CloseButton,
-  Badge
+  Badge,
+  Button
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/dragazonlogoLight.png";
@@ -16,7 +17,9 @@ import './NavigationBar.css';
 
 
 export default function NavigationBar() {
-  const [show, setShow] = useState(false);
+  const [showNavList, setShowNavList] = useState(false);
+  const [showCart, setShowCart] = useState(false);
+
   const navigate = useNavigate();
   const getTotalAmountOfProducts = (cart) => {
     if (cart.products === undefined){
@@ -26,6 +29,11 @@ export default function NavigationBar() {
         return prod.quantity;
     }).reduce((a,b) => a+b);
     return total.toString()
+}
+const getReadablePrice = (price) => {
+  var dollars = price / 100;
+  dollars = dollars.toLocaleString("en-US", {style:"currency", currency:"USD"});
+  return dollars;
 }
   return (
     <AppContext.Consumer>
@@ -40,7 +48,8 @@ export default function NavigationBar() {
     </a>
   </Navbar.Brand>
   <div className="row jusitfy-content-between align-items-center" style={{marginRight:10}}>
-  {profile !== null && <Navbar.Toggle aria-controls="cartOffCanvas" style={{marginRight:10}} className="text-white col-auto"
+  {profile !== null && <Navbar.Toggle aria-controls="cartOffCanvas" style={{marginRight:10}} className="text-white col-auto"      onClick={() => setShowCart(true)}
+
 >
     <div className="row jusitfy-content-between align-items-center ">
       <FaShoppingCart className="col-auto"/>
@@ -52,14 +61,14 @@ export default function NavigationBar() {
     <Navbar.Toggle
       className="text-white col-auto"
       aria-controls="offcanvasNavbar"
-      onClick={() => setShow(true)}
+      onClick={() => setShowNavList(true)}
     >
       <FaBars/>
       </Navbar.Toggle>
   </div>
   <Navbar.Offcanvas
-    show={show}
-    onHide={() => setShow(false)}
+    show={showNavList}
+    onHide={() => setShowNavList(false)}
     id="offcanvasNavbar"
     aria-labelledby="offcanvasNavbarLabel"
     placement="end"
@@ -72,7 +81,7 @@ export default function NavigationBar() {
           <img src={logo} alt="Dragazon Logo" style={{ width: 140, marginTop: 0 }}></img>
         </a>
       </Offcanvas.Title>
-      <CloseButton variant="white" onClick={() => setShow(false)}/>
+      <CloseButton variant="white" onClick={() => setShowNavList(false)}/>
 
     </Offcanvas.Header>
     <Offcanvas.Body>
@@ -90,7 +99,7 @@ export default function NavigationBar() {
           <Nav.Link
           className="link"
             onClick={async () => {
-              setShow(false);
+              setShowNavList(false);
                logOut();
               navigate("/login");
             }}
@@ -100,6 +109,61 @@ export default function NavigationBar() {
         )}
        
       </Nav>
+    </Offcanvas.Body>
+  </Navbar.Offcanvas>
+  <Navbar.Offcanvas
+    show={showCart}
+    onHide={() => setShowCart(false)}
+    id="cartOffCanvas"
+    aria-labelledby="offcanvasCartLabel"
+    placement="end"
+    className="bg-dark"
+    bg="dark" variant="dark"
+  >
+    <Offcanvas.Header >
+      <Offcanvas.Title id="offcanvasCartLabel">
+      <h1 className="text-white" style={{marginTop:0}}>Cart</h1>
+
+      </Offcanvas.Title>
+      <CloseButton variant="white" onClick={() => setShowCart(false)}/>
+
+    </Offcanvas.Header>
+    <Offcanvas.Body>
+      {cart.products && cart.products.map((p, key) => {
+        return <div key={key}>
+              <div className="text-white">
+              <div className="mb-3">
+                  <img alt={`${p.product.title}`} src={p.product.img} style={{width:200, }} className=""/>
+                  </div>
+                  <div className="">
+                  <p>
+                      {p.product.title} {p.quantity > 1 && `× ${p.quantity}`}
+                  </p>
+                  <p>
+                      {getReadablePrice(p.quantity * p.product.price)}
+                  </p>
+                  </div>
+                  
+              </div>
+              <hr className="solid text-white"/>
+
+          </div>
+      })}
+      <h3 className="text-white">Total: {getReadablePrice(cart.totalPrice)}</h3>
+      <Button
+            variant="danger"
+            type="button"
+            style={{
+              paddingRight: 50,
+              paddingLeft: 50,
+              borderRadius: "1% 25% / 80% ",
+              color:"ivory",
+              fontWeight:"700",
+            }}
+            disabled={cart.products==0}
+          >
+            Checkout
+          </Button>
     </Offcanvas.Body>
   </Navbar.Offcanvas>
 </Container>

@@ -123,4 +123,14 @@ router.put("/:id", async function(req, res, next) {
   
 });
 
+router.get('/:id', async function(req,res,next){
+  try {
+    const prod = await ProdModel.findById(req.params.id).exec();
+    return res.json(prod); 
+  }
+  catch (err){
+      return res.status(401).send(`Couldn't find product: ${err}`);
+  }
+
+})
 module.exports = router;
