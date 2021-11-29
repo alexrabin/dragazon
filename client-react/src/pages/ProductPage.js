@@ -17,7 +17,7 @@ export default function ProductPage() {
     return (
         <Container className="mt-3">
             <div className="mb-5 text-white">
-                <FaArrowLeft onClick={()=> {
+                <FaArrowLeft size={25} onClick={()=> {
                     navigate("/");
                 }}/>
             </div>
@@ -46,7 +46,7 @@ export default function ProductPage() {
                         </Button>
                         {quanity}
                         <Button
-                            disabled={quanity>=9 || appContext.profile===null}
+                            disabled={appContext.profile===null}
                             className='quan-buttons m-2'
                             onClick={() => setQuanity(prev => prev+1)}> 
 
