@@ -3,6 +3,7 @@ import { Container, Row, Card, Spinner, Carousel } from "react-bootstrap";
 import adminService from "../services/admin";
 import { useNavigate } from "react-router-dom";
 import head from "../assets/textheaderligred.png";
+import newitems from "../assets/newitem.png";
 
 import "./HomePage.css";
 
@@ -75,6 +76,11 @@ export default function HomePage() {
         </Carousel>
       )}
 
+<img
+        className="d-block w-100"
+        src={newitems}
+        style={{  objectFit: "contain", width:".5em", height:"15em", marginBottom:"3em" }}
+      /><br/>
       
       <Row className="justify-content-center mx-auto gy-4 gx-4">
         {!loading &&
