@@ -76,12 +76,18 @@ export default function HomePage() {
         </Carousel>
       )}
 
-<img
+      <img
         className="d-block w-100"
         src={newitems}
-        style={{  objectFit: "contain", width:".5em", height:"15em", marginBottom:"3em" }}
-      /><br/>
-      
+        style={{
+          objectFit: "contain",
+          width: ".5em",
+          height: "15em",
+          marginBottom: "3em",
+        }}
+      />
+      <br />
+
       <Row className="justify-content-center mx-auto gy-4 gx-4">
         {!loading &&
           allProducts.slice(3).map((product, key) => (
