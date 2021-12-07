@@ -91,6 +91,9 @@ const getReadablePrice = (price) => {
         { profile !== null && (
           <Nav.Link href="/profile" className="link">Profile</Nav.Link>
         )}
+        { profile !== null && (
+          <Nav.Link href="/orders" className="link">Orders</Nav.Link>
+        )}
         { profile !== null &&  profile.isAdmin && (
           <Nav.Link href="/admindashboard" className="link">Admin Dashboard</Nav.Link>
         )}
@@ -130,7 +133,7 @@ const getReadablePrice = (price) => {
 
     </Offcanvas.Header>
     <Offcanvas.Body>
-      {cart.products === undefined || cart.products.length < 1 && <div className="text-center text-white">
+      {(cart.products === undefined || cart.products.length < 1) && <div className="text-center text-white">
         <h1>Your cart is empty.</h1>
         <br/>
         <h4>Add items and they will show up here.</h4>
@@ -139,7 +142,7 @@ const getReadablePrice = (price) => {
       }
       {cart.products && cart.products.map((p, key) => {
         return <div key={key}>
-              <CartProduct p={p}/>
+              <CartProduct p={p} editable={true}/>
           </div>
       })}
       
@@ -155,7 +158,11 @@ const getReadablePrice = (price) => {
               color:"ivory",
               fontWeight:"700",
             }}
-            disabled={cart.products==0}
+            disabled={cart.products===0}
+            onClick={()=> {
+              navigate('/checkout');
+              setShowCart(false);
+            }}
           >
             Checkout
           </Button>

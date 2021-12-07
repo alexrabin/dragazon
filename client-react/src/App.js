@@ -10,6 +10,8 @@ import ProductPage from "./pages/ProductPage";
 import AppContext from './components/AppContext';
 import authService from "./services/auth";
 import mainService from "./services/main";
+import CheckoutPage from "./pages/CheckoutPage";
+import OrdersPage from "./pages/OrdersPage";
 
 
 
@@ -17,6 +19,7 @@ function App() {
 
   const [profile, setProfile] = useState(null);
   const [cart, setCart] = useState({});
+  const [orders, setOrders] = useState([]);
 
   const logOut = async () => {
     await authService.logout();
@@ -35,16 +38,25 @@ function App() {
     }
   }, []);
 
+  const fetchOrders = useCallback(async () => {
+    let orderObject = await mainService.getOrders();
+    if (orderObject.response) {
+      setOrders(orderObject.response.data);
+    } else if (orderObject.error) {
+      setOrders({});
+    }
+  }, []);
 
   const fetchProfile = useCallback(async () => {
     let user = await authService.getLoggedInUser();
     if (user.response) {
       setProfile(user.response.data);
       fetchCart();
+      fetchOrders();
     } else if (user.error) {
       setProfile(null);
     }
-  }, [fetchCart]);
+  }, [fetchCart, fetchOrders]);
 
   useEffect(() => {
     fetchProfile();
@@ -53,10 +65,13 @@ function App() {
   const appSettings = {
     profile: profile,
     cart: cart,
+    orders: orders,
     setCart,
+    setOrders,
     logOut,
     fetchProfile,
-    fetchCart
+    fetchCart,
+    fetchOrders
   };
   
   return (
@@ -69,6 +84,8 @@ function App() {
           <Route path="/profile" exact element={ <ProfilePage/>}/>
           <Route path="/admindashboard" exact element={ <AdminDashboardPage/>}/>
           <Route path="/product" exact element={ <ProductPage/>}/>
+          <Route path="/checkout" exact element={ <CheckoutPage/>}/>
+          <Route path="/orders" exact element={ <OrdersPage/>}/>
 
         </Routes>
       </AppContext.Provider>

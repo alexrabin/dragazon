@@ -25,11 +25,11 @@ export default function CartProduct(props) {
                   </div>
                   <div className="">
                   <p>
-                      {p.product.title}
+                      {p.product.title} {!props.editable && `× ${p.quantity}`}
                   </p>
                   <div className="text-center">
 
-                    <div className='quanity-group mb-3'>
+                    {props.editable && <div className='quanity-group mb-3'>
                         <Button
                         variant="secondary"
                             className='quan-buttons m-2' 
@@ -53,16 +53,16 @@ export default function CartProduct(props) {
 
                             <FaPlus/> 
                         </Button>
-                    </div>
+                    </div>}
                     </div>
                   <p>
                       {getReadablePrice(p.quantity * p.product.price)}
                   </p>
-                  <Button variant="danger" size="sm" onClick={async() => {
+                  {props.editable && <Button variant="danger" size="sm" onClick={async() => {
                       await mainService.removeFromCart(p.productId, p.quantity);
                       let cart = await mainService.getCart();
                       appContext.setCart(cart.response.data);
-                  }}>Remove</Button>
+                  }}>Remove</Button>}
                   </div>
                   
               </div>

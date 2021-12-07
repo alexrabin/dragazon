@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var OrderModel = require("../models/order");
-var UserModel = require("../models/users");
+var CartModel = require('../models/cart');
 var ProductsModel = require("../models/products");
 var authService = require('../services/auth');
 
@@ -20,6 +20,21 @@ router.get("/", async function(req, res, next) {
       res.send('Must be logged in and be admin');
     }
 });
+router.get('/userorders', async function(req,res,next){
+  let token = req.cookies.jwt;
+if (!token){
+    return res.status(401).send('Must be logged in.')
+}
+let user = await authService.verifyUser(token);
+  if (user){
+    OrderModel.find({userId: user.id}).sort({createdAt: -1}).then(orders => res.json(orders));
+
+}
+else {
+  res.status(401);
+  res.send('Must be logged in');
+}
+})
 router.get('/:id', async function(req,res,next){
     let token = req.cookies.jwt;
   if (!token){
@@ -34,7 +49,6 @@ router.get('/:id', async function(req,res,next){
             let products = await ProductsModel.find().where('_id').in(productIds).exec();
             var productItems = order.products.map(p => {
             let product = products.find(elem => elem._id == p.productId);
-            console.log(JSON.stringify(product));
             return {...p, product};
             });
             order.products = productItems;

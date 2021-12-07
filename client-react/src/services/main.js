@@ -72,11 +72,36 @@ const mainService = {
             return {error:err.response ? err.response.data: "network error"};
         }
     },
-    createOrder: async function(){
-        
+    createOrder: async function(address){
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/orders/create`, {
+                address: 
+                    address
+            }, {
+                 headers: {
+                 'content-type': 'application/json'
+                },
+                withCredentials: true,
+                credentials: 'same-origin',
+            } )
+            return {response: response};
+        } catch (err) {
+            return {error:err.response ? err.response.data: "network error"};
+        }
     },
     getOrders: async function(){
-
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/orders/userorders`, {
+                 headers: {
+                 'content-type': 'application/json'
+                },
+                withCredentials: true,
+                credentials: 'same-origin',
+            } )
+            return {response: response};
+        } catch (err) {
+            return {error:err.response ? err.response.data: "network error"};
+        }
     }
 
 }
