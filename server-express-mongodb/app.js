@@ -11,7 +11,6 @@ var mongoose = require("mongoose");
 
 var usersRouter = require("./routes/users");
 var productsRouter = require("./routes/products");
-var tasksRouter = require("./routes/tasks");
 var ordersRouter = require("./routes/orders");
 
 var app = express();
@@ -36,7 +35,6 @@ else {
 
 }
 app.set("trust proxy", 1);
-app.use("/tasks", tasksRouter);
 app.use("/users", usersRouter);
 app.use("/products", productsRouter);
 app.use("/orders", ordersRouter);
