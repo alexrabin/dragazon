@@ -3,9 +3,15 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var cors = require("cors");
+
+const dotenv = require('dotenv');
+dotenv.config();
+
 var mongoose = require("mongoose");
 
-var tasksRouter = require("./routes/tasks");
+var usersRouter = require("./routes/users");
+var productsRouter = require("./routes/products");
+var ordersRouter = require("./routes/orders");
 
 var app = express();
 
@@ -14,13 +20,28 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-app.use(cors());
 
-app.use("/tasks", tasksRouter);
+console.log("environment", app.get('env'));
+if (app.get('env') == 'development'){
+    const corsOptions ={
+        origin:'http://localhost:3001', 
+        credentials:true,            //access-control-allow-credentials:true
+        optionSuccessStatus:200
+    }
+    app.use(cors(corsOptions));
+}
+else {
+    app.use(cors());
+
+}
+app.set("trust proxy", 1);
+app.use("/users", usersRouter);
+app.use("/products", productsRouter);
+app.use("/orders", ordersRouter);
 
 //var mongoDB = "mongodb://127.0.0.1/database";
 var mongoDB =
-  "mongodb+srv://ammon:Password1%21@cluster0-lhvh5.mongodb.net/test?retryWrites=true&w=majority";
+`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@dragdb.v2dr9.mongodb.net/Dragazon?retryWrites=true&w=majority`;
 mongoose.connect(mongoDB, { useNewUrlParser: true });
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
